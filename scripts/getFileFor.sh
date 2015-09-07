@@ -27,7 +27,7 @@ TOTAL_FILES_SAVED=$(/bin/ls | grep $DATE | wc -w) ;
 
 echo "Total files saved: $TOTAL_FILES_SAVED"
 
-if [ "$TOTAL_FILES_SAVED" -eq 2 ]; then
+if [ "$TOTAL_FILES_SAVED" -gt 1 ]; then
 	mv -v $(/bin/ls | grep $DATE) /home/antouank/.solar/aiani/data ;
 	exit 0;
 else
