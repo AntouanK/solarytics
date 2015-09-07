@@ -26,7 +26,7 @@ SCRIPT
 
 echo "ftp script done"
 
-TOTAL_FILES_SAVED=$(ls | grep $TODAY | wc -l) ;
+TOTAL_FILES_SAVED=$(/bin/ls | grep $TODAY | wc -w) ;
 
 echo "Total files saved: $TOTAL_FILES_SAVED"
 
@@ -37,5 +37,3 @@ else
 	echo "No files saved!"
 	exit 1;
 fi
-
-

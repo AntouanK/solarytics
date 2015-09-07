@@ -1,12 +1,15 @@
 
 #!/bin/sh
+
+echo "making dir";
+mkdir -p /home/antouank/.solar/aiani/data ;
+
+
 DATE=$1
 USER=$SOLAR_AIANI_USER
 PASSWD=$SOLAR_AIANI_PASSWD
 
-echo "[$DATE]"
-echo "<-- Connecting to $SOLAR_AIANI_IP to fetch files for $DATE" ;
-
+echo "<-- Connecting to $SOLAR_AIANI_IP to fetch files for $DATE ($(date))" ;
 
 ftp -n $SOLAR_AIANI_IP <<SCRIPT
 user $USER $PASSWD
@@ -20,6 +23,14 @@ SCRIPT
 
 echo "ftp script done"
 
-echo "moving files:" $(ls | grep $DATE)
+TOTAL_FILES_SAVED=$(/bin/ls | grep $DATE | wc -w) ;
 
-mv -v $(ls | grep $DATE) /home/antouank/.solar/aiani/data ;
+echo "Total files saved: $TOTAL_FILES_SAVED"
+
+if [ "$TOTAL_FILES_SAVED" -eq 2 ]; then
+	mv -v $(/bin/ls | grep $DATE) /home/antouank/.solar/aiani/data ;
+	exit 0;
+else
+	echo "No files saved!"
+	exit 1;
+fi
