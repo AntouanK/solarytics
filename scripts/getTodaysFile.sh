@@ -7,16 +7,12 @@ mkdir -p /home/antouank/.solar/aiani/data ;
 echo "cd to scripts"
 cd /home/antouank/_repos_/solarytics/scripts
 
-echo "pwd:" $(pwd)
-
-echo "ftping...";
 
 TODAY=`date +%y%m%d`
 USER=$SOLAR_AIANI_USER
 PASSWD=$SOLAR_AIANI_PASSWD
 
-echo --- "$(date)"
-echo "<-- Connecting to $SOLAR_AIANI_IP to fetch files for $TODAY" ;
+echo "<-- Connecting to $SOLAR_AIANI_IP to fetch files for $TODAY ($(date))" ;
 
 ftp -n $SOLAR_AIANI_IP <<SCRIPT
 user $USER $PASSWD
@@ -30,11 +26,16 @@ SCRIPT
 
 echo "ftp script done"
 
-echo "moving files:" $(ls | grep $TODAY)
+TOTAL_FILES_SAVED=$(ls | grep $TODAY | wc -l) ;
 
-mv -v $(ls | grep $TODAY) /home/antouank/.solar/aiani/data ;
+echo "Total files saved: $TOTAL_FILES_SAVED"
 
-echo "list of /home/antouank/.solar/aiani/data" $(ls -lahG /home/antouank/.solar/aiani/data)
+if [ "$TOTAL_FILES_SAVED" -eq 2 ]; then
+	mv -v $(/bin/ls | grep $TODAY) /home/antouank/.solar/aiani/data ;
+	exit 0;
+else
+	echo "No files saved!"
+	exit 1;
+fi
 
-echo 'exit code' $?
 
