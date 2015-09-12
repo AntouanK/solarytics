@@ -1,5 +1,5 @@
 {
-  "name": "solarytics",
+  "name": "parser",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "morgan": "^1.6.1"
+    "express": "^4.13.3",
+    "pretty-ms": "^2.0.0"
   }
 }
