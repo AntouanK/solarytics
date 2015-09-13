@@ -10,6 +10,7 @@ RUN npm i ;
 
 # build the FE
 WORKDIR /home/docker/workplace/web-client/fe
+ENV NODE_ENV production
 RUN ../node_modules/gulp/bin/gulp.js build-dev
 
 WORKDIR /home/docker/workplace/web-client

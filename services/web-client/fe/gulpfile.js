@@ -13,7 +13,8 @@ const gulp          = require('gulp'),
       runSequence   = require('run-sequence');
 const logger        = new Consologger(),
       DEST_PATH     = './dist',
-      entryScript   = path.resolve('./src/scripts/entry.js');
+      entryScript   = path.resolve('./src/scripts/entry.js'),
+      NODE_ENV      = process.env.NODE_ENV;
 
 //  --------------------------------------------------  tasks
 
@@ -50,7 +51,7 @@ gulp.task('bundle-scripts', () => {
 
   return browserify(
     entryScript,
-    { debug: true }
+    { debug: NODE_ENV !== 'production' }
   )
   .transform(babelify)
   .bundle()

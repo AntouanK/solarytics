@@ -15,7 +15,7 @@ const updateList = () => {
     request
     .get(
       {
-        url: `hthttp://${window.location.hostname}.location.hostname}:11000/day-list`,
+        url: `http://${window.location.hostname}.location.hostname}:11000/day-list`,
         json: true
       },
       (err, httpRes, body) => {
