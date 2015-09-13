@@ -12,7 +12,8 @@ const PORT                = 80;
 app.use( morgan('dev') );
 
 app.post('/parse',    parse);
-app.post('/day-list', dayList);
+
+app.get('/day-list', dayList);
 
 app.listen(PORT);
 console.log(`app listening on ${PORT}...`);

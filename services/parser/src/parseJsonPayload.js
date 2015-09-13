@@ -18,59 +18,67 @@ const wantedKeys  = new Set([
 
 const parseJSONPayload = (jsonPayload) => {
 
-  let columns = new Set();
+  return new Promise(function(resolve){
 
-  jsonPayload
-  .legends
-  .forEach((key, i) => {
-    if(wantedKeys.has(key)){
-      columns.add(i);
-    }
-  });
+    let columns = new Set();
 
-
-  let snapshots = {};
-
-  jsonPayload
-  .lines
-  .map(ln => {
-    let line = [];
-    let time;
-
-    for(let index of columns){
-
-      let legend = jsonPayload.legends[index];
-      if(legend === 'Time'){
-        time = ln[index];
+    jsonPayload
+    .legends
+    .forEach((key, i) => {
+      if(wantedKeys.has(key)){
+        columns.add(i);
       }
-      else {
-        let unit = jsonPayload.units[index];
+    });
 
-        line.push({
-          legend,
-          unit,
-          value: ln[index]
-        });
+
+    let snapshots = {};
+
+    jsonPayload
+    .lines
+    .map(ln => {
+      let line = [];
+      let time;
+
+      for(let index of columns){
+
+        let legend = jsonPayload.legends[index];
+        if(legend === 'Time'){
+          time = ln[index];
+        }
+        else {
+          let unit = jsonPayload.units[index];
+          let value = +ln[index];
+
+          if(Number.isNaN(value)){
+            throw new Error(`value ${ln[index]} is NaN. Legend ${legend}, unit ${unit}`);
+          }
+
+          line.push({
+            legend,
+            unit,
+            value
+          });
+        }
+
       }
 
-    }
+      return {
+        time: ln[0],
+        data: line
+      };
+    })
+    .forEach(snapshotsObj => {
+      if(typeof snapshotsObj.time !== 'string'){
+        return true;
+      }
+      snapshots[snapshotsObj.time] = snapshotsObj;
+    });
 
-    return {
-      time: ln[0],
-      data: line
-    };
-  })
-  .forEach(snapshotsObj => {
-    if(typeof snapshotsObj.time !== 'string'){
-      return true;
-    }
-    snapshots[snapshotsObj.time] = snapshotsObj;
+    resolve({
+      date: jsonPayload.date,
+      snapshots
+    });
   });
-
-  return {
-    date: jsonPayload.date,
-    snapshots
-  }
 };
 
 module.exports = parseJSONPayload;

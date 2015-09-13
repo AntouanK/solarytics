@@ -48,6 +48,11 @@ module.exports = function(contents){
 
     if(StartState === true){
 
+      //  skip if Info;Time
+      if(line.match(/^Info;Time/)){
+        console.log('skipping "Info;Time"');
+        return true;
+      }
       let sections  = line.split(';');
       if(sections.length > 1){
         fileObj.lines.push(sections);

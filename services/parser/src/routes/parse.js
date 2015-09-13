@@ -19,25 +19,36 @@ module.exports = (req, res, next) => {
   req
   .on('end', function(chunk){
 
-    body += chunk;
+    if(chunk !== undefined){
+      body += chunk;
+    }
 
     let start = Date.now();
     let parsedData = parseBody(body);
-    let dayObj = parseJSONPayload(parsedData);
 
-    day.add(dayObj)
-    .then(() => {
+    parseJSONPayload(parsedData)
+    .then((dayObj) => {
+      return day.add(dayObj);
+    })
+    .then((dayObj) => {
 
       let ellapsed = Date.now() - start;
       console.log(`it took ${prettyMs(ellapsed)}`);
       res.json({
         status: 'ok',
-        message: `Day ${dayObj.date} was saved at ${prettyMs(ellapsed)}`
+        message: `Day was saved at ${prettyMs(ellapsed)}`
       });
     })
     .catch((err) => {
+
+      console.log(err.message);
+      console.log(err.stack);
+
       res.json({
-        status: 'error'
+        status: 'error',
+        error: {
+          message: err.message
+        }
       });
     });
   });

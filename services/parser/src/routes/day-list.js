@@ -11,8 +11,15 @@ module.exports = (req, res) => {
     });
   })
   .catch((err) => {
+
+    console.log(err.message);
+    console.log(err.stack);
+
     res.json({
-      status: 'error'
+      status: 'error',
+      error: {
+        message: err.message
+      }
     });
   });
 };
