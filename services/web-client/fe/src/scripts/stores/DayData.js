@@ -28,7 +28,7 @@ const updateList = () => {
           throw new Error(body.error.message);
         }
 
-        availableDays = body.content;
+        availableDays = body.content.sort();
         DayData.emitChange();
       }
     );
@@ -39,7 +39,6 @@ const setActiveDate = (date) => {
 
   //  set the active date
   _days.set('_active', date);
-
 };
 
 

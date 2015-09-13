@@ -1,6 +1,7 @@
 
 import React        from 'react';
 import Dispatcher   from '../Dispatcher.js';
+import {SnapshotData} from './SnapshotData.jsx';
 
 const style = {
   flex: '1 0 auto'
@@ -18,6 +19,8 @@ React.createClass({
 
     let self    = this;
     let dayObj  = this.props.dayObj;
+
+    console.log(dayObj);
 
     if(dayObj.state === 'loading'){
       return (
@@ -43,6 +46,7 @@ React.createClass({
     .toString()
     .slice(0, 15);
 
+    let aSnapshot = dayObj.snapshots[Object.keys(dayObj.snapshots).slice(0, 1)[0]];
 
     return (
       <div style={style}>
@@ -58,7 +62,29 @@ React.createClass({
           </span>
         </div>
         <div>
-
+          <table style={{ fontSize: '14px', textAlign: 'center', margin: '10px 0' }}>
+            <thead>
+              <tr>
+                <th key={'time'}>Time</th>
+                {
+                  aSnapshot.data
+                  .map((dataObj, i) => {
+                    return (
+                      <th key={i}>{dataObj.legend}</th>
+                    );
+                  })
+                }
+              </tr>
+            </thead>
+            <tbody>
+              {
+                Object.keys(dayObj.snapshots)
+                .map(key => {
+                  return (<SnapshotData key={key} snapshot={dayObj.snapshots[key]} />);
+                })
+              }
+            </tbody>
+          </table>
         </div>
       </div>
     );
