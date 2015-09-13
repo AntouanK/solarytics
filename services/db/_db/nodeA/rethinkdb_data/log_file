@@ -1,0 +1,53 @@
+2015-09-13T10:29:26.825778905 0.101363s notice: Recursively removing directory /data/rethinkdb_data/tmp
+2015-09-13T10:29:26.843003157 0.118599s notice: Initializing directory /data/rethinkdb_data
+2015-09-13T10:29:26.844255846 0.119839s notice: Running rethinkdb 2.1.1~0jessie (GCC 4.9.1)...
+2015-09-13T10:29:26.846709879 0.122294s notice: Running on Linux 4.1.6-coreos-r2 x86_64
+2015-09-13T10:29:26.847534501 0.123118s notice: Loading data from directory /data/rethinkdb_data
+2015-09-13T10:29:26.886681258 0.162265s info: Automatically using cache size of 100 MB
+2015-09-13T10:29:26.886974974 0.162558s warn: Cache size does not leave much memory for server and query overhead (available memory: 732 MB).
+2015-09-13T10:29:26.886979787 0.162563s warn: Cache size is very low and may impact performance.
+2015-09-13T10:29:26.898905578 0.174490s notice: Listening for intracluster connections on port 29015
+2015-09-13T10:29:26.899153139 0.174737s info: Attempting connection to 1 peer...
+2015-09-13T10:29:26.904123113 0.179706s notice: Connected to server "6beb47756dc9_ss8" ada0d5fa-14ed-4457-bbab-f3611aa2b911
+2015-09-13T10:29:26.906168039 0.181751s notice: Listening for client driver connections on port 28015
+2015-09-13T10:29:26.906514221 0.182098s notice: Listening for administrative HTTP connections on port 8080
+2015-09-13T10:29:26.907385944 0.182969s notice: Listening on addresses: 127.0.0.1, 172.18.0.2, ::1, fe80::42:acff:fe12:2%7
+2015-09-13T10:29:26.907389835 0.182973s notice: Server ready, "8d24a690bada_2cq" 5236c157-a7e4-4ce2-b033-3d1d6e4f90e6
+2015-09-13T10:29:27.043053092 0.318637s notice: Connected to server "de292264f945_cfp" de5afc95-a371-4c83-9dc2-845c36507ce0
+2015-09-13T10:29:27.177787351 0.453373s notice: A newer version of the RethinkDB server is available: 2.1.3. You can read the changelog at <https://github.com/rethinkdb/rethinkdb/releases>.
+2015-09-13T10:34:23.315212129 0.023762s notice: Running rethinkdb 2.1.1~0jessie (GCC 4.9.1)...
+2015-09-13T10:34:23.321051060 0.029599s notice: Running on Linux 4.1.6-coreos-r2 x86_64
+2015-09-13T10:34:23.322177768 0.030724s notice: Loading data from directory /data/rethinkdb_data
+2015-09-13T10:34:23.356851697 0.065400s info: Automatically using cache size of 100 MB
+2015-09-13T10:34:23.356972789 0.065519s warn: Cache size does not leave much memory for server and query overhead (available memory: 729 MB).
+2015-09-13T10:34:23.356977450 0.065524s warn: Cache size is very low and may impact performance.
+2015-09-13T10:34:23.361065688 0.069612s notice: Listening for intracluster connections on port 29015
+2015-09-13T10:34:23.361483532 0.070030s info: Attempting connection to 1 peer...
+2015-09-13T10:34:23.363928972 0.072475s notice: Connected to server "6beb47756dc9_ss8" ada0d5fa-14ed-4457-bbab-f3611aa2b911
+2015-09-13T10:34:23.365781516 0.074328s notice: Listening for client driver connections on port 28015
+2015-09-13T10:34:23.367617005 0.076163s notice: Listening for administrative HTTP connections on port 8080
+2015-09-13T10:34:23.368647827 0.077194s notice: Listening on addresses: 127.0.0.1, 172.18.0.2, ::1, fe80::42:acff:fe12:2%7
+2015-09-13T10:34:23.368651584 0.077198s notice: Server ready, "8d24a690bada_2cq" 5236c157-a7e4-4ce2-b033-3d1d6e4f90e6
+2015-09-13T10:34:23.990612262 0.699159s notice: A newer version of the RethinkDB server is available: 2.1.3. You can read the changelog at <https://github.com/rethinkdb/rethinkdb/releases>.
+2015-09-13T10:34:24.017424267 0.725971s notice: Connected to server "de292264f945_cfp" de5afc95-a371-4c83-9dc2-845c36507ce0
+2015-09-13T10:37:00.312846303 157.021393s info: Table eb9a441b-7642-4f39-aec0-1dbd6487b1bd: Added replica on this server.
+2015-09-13T11:08:15.048421928 0.096642s notice: Running rethinkdb 2.1.1~0jessie (GCC 4.9.1)...
+2015-09-13T11:08:15.054309558 0.102527s notice: Running on Linux 4.1.6-coreos-r2 x86_64
+2015-09-13T11:08:15.056239087 0.104455s notice: Loading data from directory /data/rethinkdb_data
+2015-09-13T11:08:15.105839679 0.154056s info: Automatically using cache size of 100 MB
+2015-09-13T11:08:15.106001129 0.154217s warn: Cache size does not leave much memory for server and query overhead (available memory: 721 MB).
+2015-09-13T11:08:15.106005372 0.154221s warn: Cache size is very low and may impact performance.
+2015-09-13T11:08:15.109949309 0.158165s notice: Listening for intracluster connections on port 29015
+2015-09-13T11:08:15.110375836 0.158591s info: Attempting connection to 1 peer...
+2015-09-13T11:08:15.112808609 0.161024s notice: Connected to server "6beb47756dc9_ss8" ada0d5fa-14ed-4457-bbab-f3611aa2b911
+2015-09-13T11:08:15.154625025 0.202841s notice: Listening for client driver connections on port 28015
+2015-09-13T11:08:15.155143575 0.203380s notice: Listening for administrative HTTP connections on port 8080
+2015-09-13T11:08:15.156693183 0.204909s notice: Listening on addresses: 127.0.0.1, 172.18.0.2, ::1, fe80::42:acff:fe12:2%7
+2015-09-13T11:08:15.156719654 0.204935s notice: Server ready, "8d24a690bada_2cq" 5236c157-a7e4-4ce2-b033-3d1d6e4f90e6
+2015-09-13T11:08:15.303908294 0.352124s notice: Connected to server "de292264f945_cfp" de5afc95-a371-4c83-9dc2-845c36507ce0
+2015-09-13T11:08:15.444162818 0.492379s notice: A newer version of the RethinkDB server is available: 2.1.3. You can read the changelog at <https://github.com/rethinkdb/rethinkdb/releases>.
+2015-09-13T11:10:39.189164198 144.237380s notice: Removing file /data/rethinkdb_data/eb9a441b-7642-4f39-aec0-1dbd6487b1bd
+2015-09-13T11:10:39.192744515 144.240961s info: Table eb9a441b-7642-4f39-aec0-1dbd6487b1bd: Deleted the table.
+2015-09-13T11:10:48.053611929 153.101827s info: Table af10a99a-ed4e-40b2-816e-232467386a5b: Added replica on this server.
+2015-09-13T11:10:49.481178046 154.529395s info: Table af10a99a-ed4e-40b2-816e-232467386a5b: Starting a new Raft election for term 1.
+2015-09-13T11:10:49.611760220 154.659977s info: Table af10a99a-ed4e-40b2-816e-232467386a5b: This server is Raft leader for term 1. Latest log index is 0.

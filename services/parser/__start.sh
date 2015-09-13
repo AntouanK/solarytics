@@ -1,10 +1,25 @@
 #!/bin/sh
 
-docker rm -f parser ;
+SERVICE_NAME='parser'
+EXISTING_DATASTORE_CONTAINERS=$(docker ps -a | grep -oE $SERVICE_NAME | uniq);
+
+# if a container already exists, remove it
+if [ -n "$EXISTING_DATASTORE_CONTAINERS" ] && [ $(echo "$EXISTING_DATASTORE_CONTAINERS" | wc -l) -ge 1 ]; then
+  echo "[$SERVICE_NAME] Removing existing $SERVICE_NAME container" ;
+  docker rm -f $EXISTING_DATASTORE_CONTAINERS ;
+fi
+
+if [ $(docker images | grep $SERVICE_NAME | wc -l) -lt 1  ]; then
+  echo "[$SERVICE_NAME] No image found!" && \
+  sh ./__build.sh ;
+fi
+
 
 docker run -d \
- -p 14000:80 \
+ -p 80:80 \
+--privileged \
 --name parser \
+--link rdbMaster \
  -v `pwd`:/home/docker \
  -w /home/docker \
-  antouank/node:4.0.0-rc.1 node ./
+  parser

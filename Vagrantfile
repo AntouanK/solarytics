@@ -120,9 +120,10 @@ Vagrant.configure("2") do |config|
         vb.cpus = vm_cpus
       end
 
-      ip = "172.17.19.#{i+100}"
+      ip = "172.17.19.#{i+10}"
       config.vm.network :private_network, ip: ip
-      config.vm.synced_folder ".", "/home/core/solarytics", id: "core", :nfs => true, :mount_options => ['nolock,vers=3,udp']
+      config.vm.synced_folder "./services", "/home/core/solarytics/services", id: "solarytics-services", :nfs => true, :mount_options => ['nolock,vers=3,udp']
+
       $shared_folders.each_with_index do |(host_folder, guest_folder), index|
         config.vm.synced_folder host_folder.to_s, guest_folder.to_s, id: "core-share%02d" % index, nfs: true, mount_options: ['nolock,vers=3,udp']
       end
@@ -138,6 +139,23 @@ Vagrant.configure("2") do |config|
 
       config.vm.provision "shell",
         inline: "
+
+        cd /home/core
+        rm .bashrc
+        cp /usr/share/skel/.bashrc .
+        echo 'alias ls=\"ls -lah\"' >> .bashrc
+        echo 'alias dps=\"docker ps -a\"' >> .bashrc
+        echo 'alias drm=\"docker rm -f\"' >> .bashrc
+        echo 'alias dlogs=\"docker logs -f\"' >> .bashrc
+        echo 'export DATA_STORE_URL=\"data-store\"' >> .bashrc
+        echo 'export IN_VAGRANT=\"true\"' >> .bashrc
+
+          cd /home/core/solarytics/services/db ;
+          sh __start.sh ;
+
+          cd /home/core/solarytics/services/parser ;
+          sh __start.sh ;
+
           echo 'VM is done setting up.   :)';
         "
     end
