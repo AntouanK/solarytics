@@ -32,6 +32,13 @@ echo "Total files saved: $TOTAL_FILES_SAVED"
 
 if [ "$TOTAL_FILES_SAVED" -eq 2 ]; then
 	mv -v $(/bin/ls | grep $TODAY) /home/antouank/.solar/aiani/data ;
+
+	echo "posting to DB"
+	curl 	-H "Content-Type: text/plain" \
+		-X POST \
+		--data-binary @/home/antouank/.solar/aiani/data/int_kwr_$TODAY.txt \
+		http://localhost:10000/parse
+
 	exit 0;
 else
 	echo "No files saved!"
