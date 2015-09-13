@@ -13,7 +13,7 @@ const PORT                = 80;
 
 
 app.use( morgan('dev') );
-app.use( cors({ origin: 'http://solarytics' }) );
+app.use( cors() );
 app.use( compression() );
 
 app.post('/parse',    parse);
