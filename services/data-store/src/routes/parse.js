@@ -1,7 +1,7 @@
 
 const prettyMs            = require('pretty-ms');
 const parseBody           = require('../parseBody');
-const parseJSONPayload    = require('../parseJSONPayload');
+const parseJsonPayload    = require('../parseJsonPayload');
 const day                 = require('../day');
 
 
@@ -26,7 +26,7 @@ module.exports = (req, res, next) => {
     let start = Date.now();
     let parsedData = parseBody(body);
 
-    parseJSONPayload(parsedData)
+    parseJsonPayload(parsedData)
     .then((dayObj) => {
       return day.add(dayObj);
     })
