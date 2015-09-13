@@ -16,7 +16,7 @@ fi
 
 
 docker run -d \
- -p 10000:80 \
+ -p 11000:80 \
 --privileged \
 --name data-store \
 --link rdbMaster \
