@@ -20,8 +20,6 @@ React.createClass({
     let self    = this;
     let dayObj  = this.props.dayObj;
 
-    console.log(dayObj);
-
     if(dayObj.state === 'loading'){
       return (
         <div style={style}>
