@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "compression": "^1.5.2",
+    "cors": "^2.7.1",
     "express": "^4.13.3",
     "morgan": "^1.6.1",
     "pretty-ms": "^2.0.0",
