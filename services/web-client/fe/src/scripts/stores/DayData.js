@@ -15,7 +15,7 @@ const updateList = () => {
     request
     .get(
       {
-        url: 'http://solarytics:11000/day-list',
+        url: `hthttp://${window.location.hostname}.location.hostname}:11000/day-list`,
         json: true
       },
       (err, httpRes, body) => {
@@ -59,7 +59,7 @@ const getStatsForDate = (date) => {
     request
     .get(
       {
-        url: `http://solarytics:11000/day/${date}`,
+        url: `http://${window.location.hostname}:11000/day/${date}`,
         json: true
       },
       (err, httpRes, body) => {
