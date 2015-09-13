@@ -2,6 +2,7 @@
 
 const express             = require('express');
 const morgan              = require('morgan');
+const compression         = require('compression');
 const parse               = require('./routes/parse');
 const dayList             = require('./routes/day-list');
 const dayGet              = require('./routes/day-get');
@@ -11,6 +12,7 @@ const PORT                = 80;
 
 
 app.use( morgan('dev') );
+app.use( compression() );
 
 app.post('/parse',    parse);
 
