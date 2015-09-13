@@ -87,14 +87,6 @@ const getStatsForDate = (date) => {
 
 const DayData = assign({}, EventEmitter.prototype, {
 
-  getAvailableList: () => {
-    return availableDays.slice();
-  },
-
-  getDay: (date) => {
-    return DayList[date];
-},
-
   emitChange: function() {
     this.emit('change');
   },
@@ -105,6 +97,10 @@ const DayData = assign({}, EventEmitter.prototype, {
 
   removeChangeListener: function(callback) {
     this.removeListener('change', callback);
+  },
+
+  getAvailableList: () => {
+    return availableDays.slice();
   },
 
   getActiveDate: () => {
