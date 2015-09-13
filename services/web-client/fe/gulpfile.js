@@ -16,6 +16,9 @@ const logger        = new Consologger(),
       entryScript   = path.resolve('./src/scripts/entry.js'),
       NODE_ENV      = process.env.NODE_ENV;
 
+
+console.log('NODE_ENV', NODE_ENV);
+
 //  --------------------------------------------------  tasks
 
 gulp.task('copy-index', () => {
