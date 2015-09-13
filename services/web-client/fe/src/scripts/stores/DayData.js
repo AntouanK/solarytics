@@ -28,7 +28,7 @@ const updateList = () => {
           throw new Error(body.error.message);
         }
 
-        availableDays = body.content.sort();
+        availableDays = body.content.sort().reverse();
         DayData.emitChange();
       }
     );
