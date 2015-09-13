@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SERVICE_NAME='parser'
+SERVICE_NAME='data-store'
 EXISTING_DATASTORE_CONTAINERS=$(docker ps -a | grep -oE $SERVICE_NAME | uniq);
 
 # if a container already exists, remove it
@@ -18,8 +18,8 @@ fi
 docker run -d \
  -p 80:80 \
 --privileged \
---name parser \
+--name data-store \
 --link rdbMaster \
  -v `pwd`:/home/docker \
  -w /home/docker \
-  parser
+  data-store

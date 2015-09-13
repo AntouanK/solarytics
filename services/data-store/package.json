@@ -1,5 +1,5 @@
 {
-  "name": "parser",
+  "name": "data-store",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "compression": "^1.5.2",
     "express": "^4.13.3",
     "morgan": "^1.6.1",
     "pretty-ms": "^2.0.0",
