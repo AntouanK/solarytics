@@ -37,7 +37,7 @@ if [ "$TOTAL_FILES_SAVED" -eq 2 ]; then
 	curl 	-H "Content-Type: text/plain" \
 		-X POST \
 		--data-binary @/home/antouank/.solar/aiani/data/int_kwr_$TODAY.txt \
-		http://localhost:10000/parse
+		http://localhost:11000/parse
 
 	exit 0;
 else
