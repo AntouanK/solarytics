@@ -3,4 +3,4 @@
 curl -H "Content-Type: text/plain" \
 -X POST \
 --data-binary @$1 \
-http://solarytics:10000/parse
+http://solarytics:11000/parse
