@@ -1,13 +1,13 @@
 
-import React        from 'react';
-import Dispatcher   from '../Dispatcher.js';
+const React        = require('react');
+const Dispatcher   = require('../Dispatcher.js');
 
 const style = {
   flex: '0 0 200px'
 };
 
 
-export const DayList =
+const DayList =
 React.createClass({
 
   onSelectDate: (date) => {
@@ -62,3 +62,5 @@ React.createClass({
     );
   }
 });
+
+module.exports = DayList;

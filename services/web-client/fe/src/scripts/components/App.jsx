@@ -1,9 +1,9 @@
 
-import React        from 'react';
-import DayDataStore from '../stores/DayData.js';
-import Dispatcher   from '../Dispatcher.js';
-import {DayList}    from './DayList.jsx';
-import {DayStats}   from './DayStats.jsx';
+const React         = require('react');
+const DayDataStore  = require('../stores/DayData.js');
+const Dispatcher    = require('../Dispatcher.js');
+const DayList       = require('./DayList.jsx');
+const Today         = require('./Today.jsx');
 
 Dispatcher
 .dispatch({
@@ -20,7 +20,8 @@ const style = {
   alignItems: 'flex-start',
 };
 
-export const App =
+
+const App =
 React.createClass({
 
   getInitialState: function() {
@@ -56,9 +57,16 @@ React.createClass({
 
     return (
       <div style={style}>
-        <DayList list={ this.state.dayList } />
-        { dayStatsComp }
+        <Today />
       </div>
     );
   }
 });
+
+module.exports = App;
+
+/*
+
+<DayList list={ this.state.dayList } />
+{ dayStatsComp }
+*/

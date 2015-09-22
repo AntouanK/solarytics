@@ -1,6 +1,5 @@
 
-import React      from 'react';
-import ReactDOM   from 'react-dom';
-import { App }    from './components/App.jsx';
+const React = require('react');
+const App   = require('./components/App.jsx');
 
-ReactDOM.render(<App />, document.querySelector('#mount'));
+React.render(<App />, document.querySelector('#mount'));

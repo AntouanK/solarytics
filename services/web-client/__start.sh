@@ -17,6 +17,7 @@ fi
 
 docker run -d \
  -p 80:80 \
+ -t \
 --privileged \
 --name $SERVICE_NAME \
 --link rdbMaster \

@@ -2,16 +2,16 @@ FROM antouank/alp-node
 
 WORKDIR /home/docker/workplace/web-client
 
-ADD ./src           /home/docker/workplace/web-client/src
-ADD ./fe            /home/docker/workplace/web-client/fe
 ADD ./package.json  /home/docker/workplace/web-client/package.json
-
-RUN npm i ;
+add ./node_modules  /home/docker/workplace/web-client/node_modules
 
 # build the FE
+ADD ./fe            /home/docker/workplace/web-client/fe
 WORKDIR /home/docker/workplace/web-client/fe
 ENV NODE_ENV production
 RUN ../node_modules/gulp/bin/gulp.js build-dev
+
+ADD ./src           /home/docker/workplace/web-client/src
 
 WORKDIR /home/docker/workplace/web-client
 

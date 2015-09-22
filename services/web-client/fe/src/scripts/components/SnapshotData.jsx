@@ -1,12 +1,12 @@
 
-import React from 'react';
+const React = require('react');
 
 const style = {
   flex: '0 0 200px'
 };
 
 
-export const SnapshotData =
+const SnapshotData =
 React.createClass({
 
   propTypes: {
@@ -31,3 +31,5 @@ React.createClass({
     );
   }
 });
+
+module.exports = SnapshotData;

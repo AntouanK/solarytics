@@ -1,14 +1,14 @@
 
-import React        from 'react';
-import Dispatcher   from '../Dispatcher.js';
-import {SnapshotData} from './SnapshotData.jsx';
+const React           = require('react');
+const Dispatcher      = require('../Dispatcher.js');
+const SnapshotData    = require('./SnapshotData.jsx');
 
 const style = {
   flex: '1 0 auto'
 };
 
 
-export const DayStats =
+const DayStats =
 React.createClass({
 
   propTypes: {
@@ -88,3 +88,5 @@ React.createClass({
     );
   }
 });
+
+module.exports = DayStats;
