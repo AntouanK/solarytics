@@ -5,11 +5,6 @@ const Dispatcher    = require('../Dispatcher.js');
 const DayList       = require('./DayList.jsx');
 const Today         = require('./Today.jsx');
 
-Dispatcher
-.dispatch({
-  actionType: 'date-list-update'
-});
-
 
 const style = {
   display: 'flex',
@@ -40,10 +35,11 @@ React.createClass({
   },
 
   _onChange: function() {
-    this.setState({
-      dayList: DayDataStore.getAvailableList(),
-      activeDate: DayDataStore.getActiveDate()
-    });
+
+    // this.setState({
+    //   dayList: DayDataStore.getAvailableList(),
+    //   activeDate: DayDataStore.getActiveDate()
+    // });
   },
 
   render: function() {

@@ -1,6 +1,7 @@
 
-const React = require('react');
-const Tile  = require('./Tile.jsx');
+const React   = require('react');
+const utils   = require('../utils');
+const Tile    = require('./Tile.jsx');
 const dayNames = [
   'sunday',
   'monday',
@@ -29,16 +30,14 @@ const style = {};
 style.todayStats = {
   flex: '1 0 300px'
 };
-style.dayName = {
-  fontSize: '44px',
+style.dayText = {
+  fontSize: '30px',
   textTransform: 'capitalize'
 };
-style.day = {
+style.time = {
   fontSize: '40px'
 };
-style.time = {
-  fontSize: '32px'
-};
+
 
 
 const Today =
@@ -47,16 +46,15 @@ React.createClass({
   _getDate() {
 
       let d = new Date();
-      let seconds = d.getSeconds();
 
       return {
         dayName: dayNames[d.getDay()],
         day: d.getDate(),
         monthName: monthNames[d.getMonth()],
         year: d.getUTCFullYear(),
-        hours: d.getHours(),
-        minutes: d.getMinutes(),
-        seconds: (seconds < 10) ? ('0' + seconds) : seconds
+        hours: utils.addZero(d.getHours()),
+        minutes: utils.addZero(d.getMinutes()),
+        seconds: utils.addZero(d.getSeconds())
       };
   },
 
@@ -81,23 +79,18 @@ React.createClass({
 
     let self  = this;
     let date  = self.state.date;
-    // let dayObj  = this.props.dayObj;
 
     return (
       <Tile style={style.todayStats}>
         <div>
-          <div>
-            <span style={style.dayName}>{date.dayName}</span>
-          </div>
-          <div>
-            <span style={style.day}>{date.day}</span>
-            <span>  </span>
-            <span>{date.monthName}</span>
-            <span>  </span>
-            <span>{date.year}</span>
+          <div style={style.dayText}>
+            <span>{date.dayName} {date.day} {date.monthName} {date.year}</span>
           </div>
           <div style={style.time}>
             {date.hours}:{date.minutes}:{date.seconds}
+          </div>
+          <div>
+            Consumption for today is
           </div>
         </div>
       </Tile>

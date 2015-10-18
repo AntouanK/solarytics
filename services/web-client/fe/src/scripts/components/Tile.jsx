@@ -3,7 +3,7 @@ const React   = require('react');
 const assign  = require('object-assign');
 
 const style = {
-  backgroundColor: '#757374',
+  backgroundColor: '#616161',
   padding: '20px'
 };
 

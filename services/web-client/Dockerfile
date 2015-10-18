@@ -9,7 +9,7 @@ add ./node_modules  /home/docker/workplace/web-client/node_modules
 ADD ./fe            /home/docker/workplace/web-client/fe
 WORKDIR /home/docker/workplace/web-client/fe
 ENV NODE_ENV production
-RUN ../node_modules/gulp/bin/gulp.js build-dev
+RUN ../node_modules/gulp/bin/gulp.js build
 
 ADD ./src           /home/docker/workplace/web-client/src
 

@@ -47,19 +47,79 @@ day.get = (date) => {
   .run(db.conn);
 };
 
-day.getAvailable = () => {
+
+day.getWh = (date) => {
 
   return r
   .table('aiani')
-  .pluck('date')
-  .run(db.conn)
-  .then((cursor) => {
-    return cursor.toArray();
+  .get(date)
+  .do(function(dayObj){
+
+    return dayObj('snapshots')
+    .keys()
+    .map(function(key){
+      return dayObj('snapshots')(key)('data');
+    })
+    .map(function(dataObj){
+      return dataObj.filter({ legend: 'E_D_WR' })(0)('value');
+    })
+    .sum();
   })
-  .then((list) => {
-    return list.map(listObj => { return listObj.date; });
+  .run(db.conn)
+  .then(value => {
+
+    return {
+      date,
+      value
+    };
   });
 };
+
+
+day.getAvailable = (() => {
+
+  let cachedList;
+
+  db.isReady
+  .then(() => {
+    //  initialise the first time
+    r
+    .table('aiani')
+    .pluck('date')
+    .run(db.conn, (err, cursor) => {
+
+      cursor.toArray()
+      .then(list => {
+        cachedList = list.map(listObj => { return listObj.date; });
+      });
+
+    });
+
+    r
+    .table('aiani')
+    .pluck('date')
+    .changes()
+    .run(db.conn, (err, cursor) => {
+      cursor.each((change) => {
+
+        if(change.old_val === null && typeof change.new_val.date === 'string'){
+          cachedList.push(change.new_val.date);
+        }
+      });
+    });
+  })
+  .catch(function(err){
+    console.log(err.message);
+  });
+
+
+  return () => {
+    return new Promise(function(resolve){
+      resolve(cachedList);
+    });
+  };
+
+})();
 
 
 module.exports = day;

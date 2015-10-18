@@ -8,7 +8,9 @@ const dbExports = {};
 
 dbExports.isReady =
 r.connect({
-  host: DB_HOST
+  host: '192.168.1.128',
+  port: 28015,
+  db: DB_NAME
 })
 .then(conn => {
   // save that connection to reuse it
