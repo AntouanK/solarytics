@@ -13,11 +13,7 @@ const getRangeList = (start, end) => {
   let endDay      = +end.slice(4, 6);
   let endDate     = new Date(endYear, endMonth, endDay);
 
-  console.log(startDate);
-  console.log(endDate);
-
   let howManyDaysBetween = ((endDate - startDate) / (1000 * 60 * 60 * 24)) | 0;
-  console.log('howManyDaysBetween', howManyDaysBetween);
   let dateRange = [];
 
   for(let i = 0; i <= howManyDaysBetween; i += 1){
@@ -35,11 +31,16 @@ const getRangeList = (start, end) => {
   dateRange =
   dateRange
   .map(date => {
-    let month = date.getMonth() + '';
-    if(month.length === 1){ month = '0' + month; }
+    //  month starts from zero (!)
+    let month = (date.getMonth() + 1) + '';
+    if(month.length === 1){
+      month = '0' + month;
+    }
 
     let day = date.getDate() + '';
-    if(day.length === 1){ day = '0' + day; }
+    if(day.length === 1){
+      day = '0' + day;
+    }
 
     let year = (date.getUTCFullYear() + '').slice(2,4);
 
@@ -48,7 +49,6 @@ const getRangeList = (start, end) => {
 
   return dateRange;
 };
-
 
 
 

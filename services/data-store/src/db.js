@@ -8,7 +8,7 @@ const dbExports = {};
 
 dbExports.isReady =
 r.connect({
-  host: '192.168.1.128',
+  host: DB_HOST,
   port: 28015,
   db: DB_NAME
 })
