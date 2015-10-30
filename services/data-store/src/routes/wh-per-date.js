@@ -74,10 +74,13 @@ module.exports = (req, res) => {
   })
   .catch((err) => {
 
+    console.log(err.stack);
+
     res.json({
       status: 'error',
       error: {
-        message: err.message
+        message: err.message,
+        stack: err.stack
       }
     });
   });

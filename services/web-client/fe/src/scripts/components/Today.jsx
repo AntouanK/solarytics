@@ -1,7 +1,11 @@
 
+'use strict';
+
+//--------------------------------------------------------------  imports
 const React   = require('react');
 const utils   = require('../utils');
 const Tile    = require('./Tile.jsx');
+
 const dayNames = [
   'sunday',
   'monday',
@@ -26,6 +30,7 @@ const monthNames = [
   'december'
 ];
 
+//--------------------------------------------------------------  style
 const style = {};
 style.todayStats = {
   flex: '1 0 300px'
@@ -39,9 +44,8 @@ style.time = {
 };
 
 
-
-const Today =
-React.createClass({
+//--------------------------------------------------------------  Component
+const Today = React.createClass({
 
   _getDate() {
 
@@ -59,7 +63,6 @@ React.createClass({
   },
 
   componentDidMount() {
-
     this.__interval =
     setInterval(() => {
       this.setState({ date: this._getDate() });
@@ -67,7 +70,6 @@ React.createClass({
   },
 
   componentWillUnmount() {
-
     clearInterval(this.__interval);
   },
 
@@ -89,13 +91,11 @@ React.createClass({
           <div style={style.time}>
             {date.hours}:{date.minutes}:{date.seconds}
           </div>
-          <div>
-            Consumption for today is
-          </div>
         </div>
       </Tile>
     );
   }
 });
 
+//--------------------------------------------------------------  export
 module.exports = Today;

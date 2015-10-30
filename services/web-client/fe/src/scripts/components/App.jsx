@@ -1,11 +1,13 @@
 
+'use strict';
+
+//--------------------------------------------------------------  imports
 const React         = require('react');
 const DayDataStore  = require('../stores/DayData.js');
 const Dispatcher    = require('../Dispatcher.js');
-const DayList       = require('./DayList.jsx');
 const Today         = require('./Today.jsx');
 
-
+//--------------------------------------------------------------  style
 const style = {
   display: 'flex',
   flexDirection: 'row',
@@ -16,15 +18,8 @@ const style = {
 };
 
 
-const App =
-React.createClass({
-
-  getInitialState: function() {
-    return {
-      dayList: DayDataStore.getAvailableList(),
-      activeDate: DayDataStore.getActiveDate()
-    };
-  },
+//--------------------------------------------------------------  Component
+const App = React.createClass({
 
   componentDidMount: function() {
     DayDataStore.addChangeListener(this._onChange);
@@ -35,21 +30,11 @@ React.createClass({
   },
 
   _onChange: function() {
-
-    // this.setState({
-    //   dayList: DayDataStore.getAvailableList(),
-    //   activeDate: DayDataStore.getActiveDate()
-    // });
+    console.log('on change');
+    console.log(DayDataStore.getState());
   },
 
   render: function() {
-
-    let dayStatsComp = '';
-    let activeDayObj = DayDataStore.getDay(this.state.activeDate);
-
-    if(activeDayObj !== undefined){
-      dayStatsComp = ( <DayStats dayObj={activeDayObj} /> );
-    }
 
     return (
       <div style={style}>
@@ -59,10 +44,5 @@ React.createClass({
   }
 });
 
+//--------------------------------------------------------------  export
 module.exports = App;
-
-/*
-
-<DayList list={ this.state.dayList } />
-{ dayStatsComp }
-*/

@@ -4,6 +4,8 @@ const Dispatcher    = require('./Dispatcher.js');
 const utils         = require('./utils');
 const App           = require('./components/App.jsx');
 
+var todaysDate;
+
 
 const triggerUpdate = () => {
 
@@ -11,7 +13,7 @@ const triggerUpdate = () => {
   let year = utils.addZero(d.getFullYear().toString().slice(-2));
   let month = utils.addZero(d.getMonth() + 1);
   let day = utils.addZero(d.getDate());
-  let date = `${year}${month}${day}`;
+  todaysDate = `${year}${month}${day}`;
 
   Dispatcher
   .dispatch({
@@ -21,14 +23,17 @@ const triggerUpdate = () => {
   Dispatcher
   .dispatch({
     actionType: 'fetch-total-for-date',
-    date
+    startDate: todaysDate,
+    endDate: todaysDate
   });
 };
-
 
 
 triggerUpdate();
 setInterval(triggerUpdate, 60000);
 
 
-React.render(<App />, document.querySelector('#mount'));
+React.render(
+  <App today={todaysDate} />,
+  document.querySelector('#mount')
+);

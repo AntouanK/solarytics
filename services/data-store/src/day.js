@@ -50,29 +50,40 @@ day.get = (date) => {
 
 day.getWh = (date) => {
 
-  return r
-  .table('aiani')
+  return day
   .get(date)
-  .do(function(dayObj){
+  .then(dayObj => {
 
-    return dayObj('snapshots')
-    .keys()
-    .map(function(key){
-      return dayObj('snapshots')(key)('data');
-    })
-    .map(function(dataObj){
-      return dataObj.filter({ legend: 'E_D_WR' })(0)('value');
-    })
-    .sum();
-  })
-  .run(db.conn)
-  .then(value => {
+    //  if null, return value undefined
+    if(dayObj === null){
+      //  -------------------------------------> EXIT
+      return { date };
+    }
 
-    return {
-      date,
-      value
-    };
+    let value =
+    // get the snapshots keys
+    Object
+    .keys(dayObj.snapshots)
+    //  for every key,
+    .map(snapshotKey => {
+
+      //  get that snapshot
+      return dayObj.snapshots[snapshotKey]
+      //  get the data field
+      .data
+      //  filter to get only the E_D_WR metric
+      .filter(snapshotDataObj => {
+        return snapshotDataObj.legend === 'E_D_WR';
+      })
+      .pop()
+      .value;
+    })
+    .reduce((prev, cur) => { return prev + cur; });
+
+    //  ---------------------------------------> EXIT
+    return { date, value };
   });
+
 };
 
 

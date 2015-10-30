@@ -40,14 +40,21 @@ const getWhPerDate = (startDate, endDate) => {
           reject(new Error(body.error.message));
         }
 
+        let datesSet = new Set();
+
         body.content
         .forEach(result => {
           if(Number.isInteger(result.value)){
             STATE.dateTotal.set(result.date, result.value);
+
+            datesSet.add(result.date);
           }
         });
 
-        resolve('ok');
+        resolve({
+          status: 'ok',
+          datesSet
+        });
       }
     );
   });
