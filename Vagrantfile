@@ -156,6 +156,9 @@ Vagrant.configure("2") do |config|
           cd /home/core/solarytics/services/data-store ;
           sh __start.sh ;
 
+          cd /home/core/solarytics/services/web-client ;
+          sh __start.sh ;
+
           echo 'VM is done setting up.   :)';
         "
     end

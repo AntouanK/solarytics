@@ -7,6 +7,7 @@ const cors                = require('cors');
 const parse               = require('./routes/parse');
 const dayList             = require('./routes/day-list');
 const dayGet              = require('./routes/day-get');
+const whPerDate           = require('./routes/wh-per-date');
 const app                 = express();
 const PORT                = 80;
 
@@ -20,6 +21,8 @@ app.post('/parse',    parse);
 
 app.get('/day-list',  dayList);
 app.get('/day/:date', dayGet);
+app.get('/wh/per/date/:startdate/:enddate', whPerDate);
+
 
 app.listen(PORT);
 console.log(`app listening on ${PORT}...`);

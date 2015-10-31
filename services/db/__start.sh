@@ -3,7 +3,7 @@
 EXISTING_RDB_CONTAINERS=$(docker ps -a | grep -oE "rdb\w+" | xargs | cat);
 
 # if an "rdb" container exists, remove it
-if [ -n "$EXISTING_DATASTORE_CONTAINERS" ] && [ $(echo "$EXISTING_DATASTORE_CONTAINERS" | wc -l) -ge 1 ]; then
+if [ -n "$EXISTING_RDB_CONTAINERS" ]; then
   echo "[rdb] Removing existing rdb containers ($EXISTING_RDB_CONTAINERS)";
   docker rm -f $EXISTING_RDB_CONTAINERS ;
 fi

@@ -4,13 +4,66 @@ import request      from 'request';
 import assign       from 'object-assign';
 const EventEmitter = require('events').EventEmitter;
 
-var availableDays = [];
-var _days = new Map();
+const STATE = {
+  availableDays: [],
+  dateTotal: new Map(),
+  todaysDate: ''
+};
+
+
+
+const getWhPerDate = (startDate, endDate) => {
+
+  return new Promise((resolve, reject) => {
+
+    if(typeof endDate !== 'string'){
+      endDate = startDate;
+    }
+
+    if(typeof startDate !== 'string'){
+      reject(new Error('start date must be a string'));
+    }
+
+    request
+    .get(
+      {
+        url: `http://${window.location.hostname}:11000/wh/per/date/${startDate}/${endDate}`,
+        json: true
+      },
+      (err, httpRes, body) => {
+
+        if(err){
+          throw new Error(err);
+        }
+
+        if(body.status !== 'ok'){
+          reject(new Error(body.error.message));
+        }
+
+        let datesSet = new Set();
+
+        body.content
+        .forEach(result => {
+          if(Number.isInteger(result.value)){
+            STATE.dateTotal.set(result.date, result.value);
+
+            datesSet.add(result.date);
+          }
+        });
+
+        resolve({
+          status: 'ok',
+          datesSet
+        });
+      }
+    );
+  });
+};
 
 
 const updateList = () => {
 
-  return new Promise(function(res, rej){
+  return new Promise((resolve, reject) => {
 
     request
     .get(
@@ -21,68 +74,19 @@ const updateList = () => {
       (err, httpRes, body) => {
 
         if(err){
-          throw new Error(err);
+          return reject(err);
         }
 
         if(body.status !== 'ok'){
-          throw new Error(body.error.message);
+          return reject(body.error.message);
         }
 
-        availableDays = body.content.sort().reverse();
-        DayData.emitChange();
+        STATE.availableDays = body.content.sort().reverse();
+        resolve();
       }
     );
   });
 };
-
-const setActiveDate = (date) => {
-
-  //  set the active date
-  _days.set('_active', date);
-};
-
-
-const getStatsForDate = (date) => {
-
-  return new Promise(function(res, rej){
-
-    //  set the loading state
-    if(!_days.has(date)){
-      _days.set(date, { state: 'loading' });
-    }
-    else {
-      let oldDayObj = _days.get(date);
-      oldDayObj.state = 'loading';
-      _days.set(date, oldDayObj);
-    }
-
-    request
-    .get(
-      {
-        url: `http://${window.location.hostname}:11000/day/${date}`,
-        json: true
-      },
-      (err, httpRes, body) => {
-
-        if(err){
-          throw new Error(err);
-        }
-
-        if(body.status !== 'ok'){
-          throw new Error(body.error.message);
-        }
-
-        let newDayObj = body.content;
-        newDayObj.state = 'upToDate';
-        newDayObj.lastModified = Date.now();
-
-        _days.set(date, newDayObj);
-        DayData.emitChange();
-      }
-    );
-  });
-};
-
 
 
 const DayData = assign({}, EventEmitter.prototype, {
@@ -99,19 +103,10 @@ const DayData = assign({}, EventEmitter.prototype, {
     this.removeListener('change', callback);
   },
 
-  getAvailableList: () => {
-    return availableDays.slice();
-  },
-
-  getActiveDate: () => {
-    return _days.get('_active');
-  },
-
-  getDay: (date) => {
-    return _days.get(date);
+  getState: () => {
+    return STATE;
   }
 });
-
 
 
 Dispatcher.register(function(payload) {
@@ -119,17 +114,28 @@ Dispatcher.register(function(payload) {
   switch (payload.actionType) {
 
     case 'date-list-update':
-      updateList();
-      DayData.emitChange();
+      updateList()
+      .then(() => {
+        DayData.emitChange();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
       break;
 
-    case 'set-active-date':
-      setActiveDate(payload.date);
-      getStatsForDate(payload.date);
-      DayData.emitChange();
+    case 'fetch-total-for-date':
+      getWhPerDate(payload.startDate, payload.endDate)
+      .then(() => {
+        DayData.emitChange();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
       break;
 
     default:
+      break;
   }
 });
 

@@ -1,33 +1,33 @@
 
-import React        from 'react';
-import DayDataStore from '../stores/DayData.js';
-import Dispatcher   from '../Dispatcher.js';
-import {DayList}    from './DayList.jsx';
-import {DayStats}   from './DayStats.jsx';
+'use strict';
 
-Dispatcher
-.dispatch({
-  actionType: 'date-list-update'
-});
+//--------------------------------------------------------------  imports
+const React         = require('react');
+const DayDataStore  = require('../stores/DayData.js');
+const Dispatcher    = require('../Dispatcher.js');
+const Today         = require('./Today.jsx');
+const DaysWh        = require('./DaysWh.jsx');
 
-
+//--------------------------------------------------------------  style
 const style = {
   display: 'flex',
-  flexDirection: 'row',
+  flexDirection: 'column',
   flexWrap: 'wrap',
   justifyContent: 'flex-start',
   alignContent: 'flex-start',
   alignItems: 'flex-start',
 };
 
-export const App =
-React.createClass({
 
-  getInitialState: function() {
-    return {
-      dayList: DayDataStore.getAvailableList(),
-      activeDate: DayDataStore.getActiveDate()
-    };
+//--------------------------------------------------------------  Component
+const App = React.createClass({
+
+  propTypes: {
+    todaysDate:  React.PropTypes.string.isRequired
+  },
+
+  getInitialState() {
+    return DayDataStore.getState();
   },
 
   componentDidMount: function() {
@@ -39,26 +39,42 @@ React.createClass({
   },
 
   _onChange: function() {
-    this.setState({
-      dayList: DayDataStore.getAvailableList(),
-      activeDate: DayDataStore.getActiveDate()
-    });
+    this.setState(DayDataStore.getState());
   },
 
   render: function() {
 
-    let dayStatsComp = '';
-    let activeDayObj = DayDataStore.getDay(this.state.activeDate);
+    let todaysWh = this.state.dateTotal.get(this.props.todaysDate);
+    let d = this.props.todaysDate;
+    let todaysWhComponent = '';
 
-    if(activeDayObj !== undefined){
-      dayStatsComp = ( <DayStats dayObj={activeDayObj} /> );
+    if(Number.isInteger(todaysWh)){
+      todaysWhComponent = (
+        <DaysWh
+        wh={todaysWh}
+        prefix={'Production for today is '} />);
+    }
+
+    let lastYearSameDate = ((d.substr(0,2) | 0) - 1) + d.substr(2);
+    let lastYearSameDateWh = this.state.dateTotal.get(lastYearSameDate);
+    let lastYearSameDateWhComponent = '';
+
+    if(Number.isInteger(lastYearSameDateWh)){
+      lastYearSameDateWhComponent = (
+        <DaysWh
+        wh={lastYearSameDateWh}
+        prefix={`Last year, for the same date (${lastYearSameDate}) `} />);
     }
 
     return (
       <div style={style}>
-        <DayList list={ this.state.dayList } />
-        { dayStatsComp }
+        <Today />
+        {todaysWhComponent}
+        {lastYearSameDateWhComponent}
       </div>
     );
   }
 });
+
+//--------------------------------------------------------------  export
+module.exports = App;

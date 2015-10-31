@@ -1,0 +1,13 @@
+r.db('solar')
+  .table('aiani')
+  .get('150721')
+  .do(function(dayObj){
+    return dayObj('snapshots').keys()
+      .map(function(key){
+        return dayObj('snapshots')(key)('data');
+      })
+      .map(function(dataObj){
+        return dataObj.filter({ legend: 'E_D_WR' })(0)('value');
+      })
+      .sum()
+  })

@@ -17,9 +17,8 @@ fi
 
 docker run -d \
  -p 11000:80 \
---privileged \
 --name data-store \
---link rdbMaster \
+--link rdbMaster:rdbMaster \
  -v $(pwd)/src:/home/docker/workplace/data-store/src \
  -w /home/docker/workplace/data-store \
   data-store

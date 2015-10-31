@@ -47,18 +47,66 @@ day.get = (date) => {
   .run(db.conn);
 };
 
+
+day.getWh = (date) => {
+
+  return day
+  .get(date)
+  .then(dayObj => {
+
+    //  if null, return value undefined
+    if(dayObj === null){
+      //  -------------------------------------> EXIT
+      return { date };
+    }
+
+    let value =
+    // get the snapshots keys
+    Object
+    .keys(dayObj.snapshots)
+    //  for every key,
+    .map(snapshotKey => {
+
+      //  get that snapshot
+      return dayObj.snapshots[snapshotKey]
+      //  get the data field
+      .data
+      //  filter to get only the E_D_WR metric
+      .filter(snapshotDataObj => {
+        return snapshotDataObj.legend === 'E_D_WR';
+      })
+      .pop()
+      .value;
+    })
+    .reduce((prev, cur) => { return prev + cur; });
+
+    //  ---------------------------------------> EXIT
+    return { date, value };
+  });
+
+};
+
+
 day.getAvailable = () => {
 
-  return r
-  .table('aiani')
-  .pluck('date')
-  .run(db.conn)
-  .then((cursor) => {
-    return cursor.toArray();
-  })
-  .then((list) => {
-    return list.map(listObj => { return listObj.date; });
+  return new Promise((resolve, reject) => {
+
+    db.isReady
+    .then(() => {
+      //  initialise the first time
+      r
+      .table('aiani')
+      .pluck('date')
+      .run(db.conn)
+      .then(cursor => {
+        cursor.toArray()
+        .then(resolve)
+        .catch(reject);
+      });
+    })
+    .catch(reject);
   });
+
 };
 
 
