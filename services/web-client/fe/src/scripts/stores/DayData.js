@@ -63,7 +63,7 @@ const getWhPerDate = (startDate, endDate) => {
 
 const updateList = () => {
 
-  return new Promise(function(res, rej){
+  return new Promise((resolve, reject) => {
 
     request
     .get(
@@ -74,15 +74,15 @@ const updateList = () => {
       (err, httpRes, body) => {
 
         if(err){
-          throw new Error(err);
+          return reject(err);
         }
 
         if(body.status !== 'ok'){
-          throw new Error(body.error.message);
+          return reject(body.error.message);
         }
 
         STATE.availableDays = body.content.sort().reverse();
-        DayData.emitChange();
+        resolve();
       }
     );
   });
@@ -114,13 +114,24 @@ Dispatcher.register(function(payload) {
   switch (payload.actionType) {
 
     case 'date-list-update':
-      updateList();
-      DayData.emitChange();
+      updateList()
+      .then(() => {
+        DayData.emitChange();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
       break;
 
     case 'fetch-total-for-date':
-      getWhPerDate(payload.startDate, payload.endDate);
-      DayData.emitChange();
+      getWhPerDate(payload.startDate, payload.endDate)
+      .then(() => {
+        DayData.emitChange();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
       break;
 
     default:

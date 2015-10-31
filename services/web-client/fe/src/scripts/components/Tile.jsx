@@ -4,7 +4,8 @@ const assign  = require('object-assign');
 
 const style = {
   backgroundColor: '#616161',
-  padding: '20px'
+  padding: '20px',
+  margin: '15px'
 };
 
 

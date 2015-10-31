@@ -33,7 +33,7 @@ const monthNames = [
 //--------------------------------------------------------------  style
 const style = {};
 style.todayStats = {
-  flex: '1 0 300px'
+  flex: '1 0 auto'
 };
 style.dayText = {
   fontSize: '30px',

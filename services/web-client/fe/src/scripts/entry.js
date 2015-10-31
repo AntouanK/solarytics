@@ -15,6 +15,9 @@ const triggerUpdate = () => {
   let day = utils.addZero(d.getDate());
   todaysDate = `${year}${month}${day}`;
 
+  let lastYearSameDate =
+  ((todaysDate.substr(0,2) | 0) - 1) + todaysDate.substr(2);
+
   Dispatcher
   .dispatch({
     actionType: 'date-list-update'
@@ -23,17 +26,17 @@ const triggerUpdate = () => {
   Dispatcher
   .dispatch({
     actionType: 'fetch-total-for-date',
-    startDate: todaysDate,
+    startDate: lastYearSameDate,
     endDate: todaysDate
   });
 };
 
 
 triggerUpdate();
-setInterval(triggerUpdate, 60000);
+setInterval(triggerUpdate, 10000);
 
 
 React.render(
-  <App today={todaysDate} />,
+  <App todaysDate={todaysDate} />,
   document.querySelector('#mount')
 );
