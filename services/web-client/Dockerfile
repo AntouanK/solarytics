@@ -3,7 +3,8 @@ FROM antouank/alp-node
 WORKDIR /home/docker/workplace/web-client
 
 ADD ./package.json  /home/docker/workplace/web-client/package.json
-add ./node_modules  /home/docker/workplace/web-client/node_modules
+
+RUN npm i
 
 # build the FE
 ADD ./fe            /home/docker/workplace/web-client/fe
