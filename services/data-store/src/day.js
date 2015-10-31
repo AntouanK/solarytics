@@ -4,6 +4,8 @@ const r     = require('rethinkdb');
 const db    = require('./db');
 const day   = {};
 
+
+
 day.check = (newDay) => {
 
   if(typeof newDay.date !== 'string'){
