@@ -10,7 +10,8 @@ const Tile    = require('./Tile.jsx');
 //--------------------------------------------------------------  style
 const style = {
   flex: '1 0 auto',
-  display: 'flex'
+  display: 'flex',
+  alignItems: 'center'
 };
 const labelStyle = {
   flex: '0 0 200px',
@@ -33,22 +34,13 @@ const DaysWhBars = React.createClass({
     wh:  React.PropTypes.number.isRequired
   },
 
-  // componentDidMount() {
-  //
-  // },
-  //
-  // componentWillUnmount() {
-  //   if(this.__interval){
-  //     clearInterval(this.__interval);
-  //   }
-  // },
-
   render: function() {
 
     let width = ((this.props.wh * 100) / this.props.max) + '%';
     let barStyle = {
       height: '15px',
       width,
+      borderRadius: '2px',
       backgroundColor: '#bfd9bf'
     };
 
