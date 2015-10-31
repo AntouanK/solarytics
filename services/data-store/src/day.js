@@ -87,50 +87,27 @@ day.getWh = (date) => {
 };
 
 
-day.getAvailable = (() => {
+day.getAvailable = () => {
 
-  let cachedList;
+  return new Promise((resolve, reject) => {
 
-  db.isReady
-  .then(() => {
-    //  initialise the first time
-    r
-    .table('aiani')
-    .pluck('date')
-    .run(db.conn, (err, cursor) => {
-
-      cursor.toArray()
-      .then(list => {
-        cachedList = list.map(listObj => { return listObj.date; });
+    db.isReady
+    .then(() => {
+      //  initialise the first time
+      r
+      .table('aiani')
+      .pluck('date')
+      .run(db.conn)
+      .then(cursor => {
+        cursor.toArray()
+        .then(resolve)
+        .catch(reject);
       });
-
-    });
-
-    r
-    .table('aiani')
-    .pluck('date')
-    .changes()
-    .run(db.conn, (err, cursor) => {
-      cursor.each((change) => {
-
-        if(change.old_val === null && typeof change.new_val.date === 'string'){
-          cachedList.push(change.new_val.date);
-        }
-      });
-    });
-  })
-  .catch(function(err){
-    console.log(err.message);
+    })
+    .catch(reject);
   });
 
-
-  return () => {
-    return new Promise(function(resolve){
-      resolve(cachedList);
-    });
-  };
-
-})();
+};
 
 
 module.exports = day;
