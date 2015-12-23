@@ -17,11 +17,11 @@ app.use( morgan('dev') );
 app.use( cors() );
 app.use( compression() );
 
-app.post('/parse',    parse);
+app.post('/api/parse',    parse);
 
-app.get('/day-list',  dayList);
-app.get('/day/:date', dayGet);
-app.get('/wh/per/date/:startdate/:enddate', whPerDate);
+app.get('/api/day-list',  dayList);
+app.get('/api/day/:date', dayGet);
+app.get('/api/wh/per/date/:startdate/:enddate', whPerDate);
 
 
 app.listen(PORT);
