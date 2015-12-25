@@ -6,6 +6,6 @@ npm_debug.log
 
 box-data/
 
-services/db/_db
+_db
 
 services/web-client/fe/dist

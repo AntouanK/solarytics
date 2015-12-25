@@ -1,0 +1,45 @@
+
+rdbMaster:
+  image: rethinkdb
+  volumes:
+    - ./_db/master:/data
+  command: rethinkdb --bind all
+
+rdbNodeA:
+  image: rethinkdb
+  links:
+    - rdbMaster
+  volumes:
+    - ./_db/nodeA:/data
+  command: rethinkdb --join rdbMaster:29015 --bind all
+
+rdbNodeB:
+  image: rethinkdb
+  links:
+    - rdbMaster
+  volumes:
+    - ./_db/nodeB:/data
+  command: rethinkdb --join rdbMaster:29015 --bind all
+
+data-store:
+  image: data-store
+  links:
+    - rdbMaster
+  working_dir: /home/docker/workplace/data-store
+
+web-client:
+  image: web-client
+  working_dir: /home/docker/workplace/web-client
+
+nginx:
+  image: nginx
+  privileged: true
+  links:
+    - web-client
+    - data-store
+  volumes:
+    - ./nginx.conf:/etc/nginx/nginx.conf
+    - /etc/letsencrypt/archive/crazy.homeip.net:/etc/letsencrypt/live/crazy.homeip.net
+  ports:
+    - "80:80"
+    - "443:443"

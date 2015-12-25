@@ -1,4 +1,4 @@
-FROM antouank/alp-node
+FROM mhart/alpine-node
 
 WORKDIR /home/docker/workplace/web-client
 

@@ -11,6 +11,7 @@ cd /home/antouank/_repos_/solarytics/scripts
 TODAY=`date +%y%m%d`
 USER=$SOLAR_AIANI_USER
 PASSWD=$SOLAR_AIANI_PASSWD
+DOMAIN="crazy.homeip.net"
 
 echo "<-- Connecting to $SOLAR_AIANI_IP to fetch files for $TODAY ($(date))" ;
 
@@ -37,7 +38,7 @@ if [ "$TOTAL_FILES_SAVED" -eq 2 ]; then
 	curl 	-H "Content-Type: text/plain" \
 		-X POST \
 		--data-binary @/home/antouank/.solar/aiani/data/int_kwr_$TODAY.txt \
-		http://localhost:11000/parse
+		https://$DOMAIN/api/parse
 
 	exit 0;
 else

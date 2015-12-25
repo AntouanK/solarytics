@@ -3,7 +3,6 @@ import Dispatcher   from '../Dispatcher.js';
 import request      from 'request';
 import assign       from 'object-assign';
 const EventEmitter = require('events').EventEmitter;
-const PORT = 11101;
 
 const STATE = {
   availableDays: [],
@@ -28,7 +27,7 @@ const getWhPerDate = (startDate, endDate) => {
     request
     .get(
       {
-        url: `http://${window.location.hostname}:${PORT}/wh/per/date/${startDate}/${endDate}`,
+        url: `https://${window.location.hostname}/api/wh/per/date/${startDate}/${endDate}`,
         json: true
       },
       (err, httpRes, body) => {
@@ -69,7 +68,7 @@ const updateList = () => {
     request
     .get(
       {
-        url: `http://${window.location.hostname}:${PORT}/day-list`,
+        url: `https://${window.location.hostname}/api/day-list`,
         json: true
       },
       (err, httpRes, body) => {
