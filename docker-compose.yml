@@ -1,6 +1,8 @@
 
 rdbMaster:
   image: rethinkdb
+  ports:
+    - "18080:8080"
   volumes:
     - ./_db/master:/data
   command: rethinkdb --bind all
@@ -22,9 +24,11 @@ rdbNodeB:
   command: rethinkdb --join rdbMaster:29015 --bind all
 
 data-store:
-  image: data-store
+  build: ./services/data-store
   links:
     - rdbMaster
+  ports:
+    - "8080:80"
   working_dir: /home/docker/workplace/data-store
 
 web-client:

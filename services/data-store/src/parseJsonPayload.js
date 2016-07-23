@@ -42,9 +42,8 @@ const parseJSONPayload = (jsonPayload) => {
       for(let index of columns){
 
         let legend = jsonPayload.legends[index];
-        if(legend === 'Time'){
-          time = ln[index];
-        }
+
+        if(legend === 'Time'){ time = ln[index]; }
         else {
           let unit = jsonPayload.units[index];
           let value = +ln[index];

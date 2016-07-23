@@ -20,11 +20,11 @@ day.check = (newDay) => {
   .map(key => { return newDay.snapshots[key]; })
   .forEach(snapshot => {
     if( !Array.isArray(snapshot.data) ){
-      throw new Error('.data of asnapshot must be an Array');
+      throw new Error('.data of a snapshot must be an Array');
     }
 
     if(typeof snapshot.time !== 'string'){
-      throw new Error('.time of asnapshot must be a string');
+      throw new Error('.time of a snapshot must be a string');
     }
   });
 };

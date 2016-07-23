@@ -1,8 +1,22 @@
+'use strict';
 
+const r                   = require('rethinkdb');
 const prettyMs            = require('pretty-ms');
 const parseBody           = require('../parseBody');
 const parseJsonPayload    = require('../parseJsonPayload');
 const day                 = require('../day');
+const db                  = require('../db');
+
+const markParseUpdate = (dayObj) => r
+  .table('meta')
+  .insert(
+    {
+      id: 'lastUpdate',
+      timestamp: Date.now()
+    },
+    { conflict: 'update' }
+  )
+  .run(db.conn);
 
 
 module.exports = (req, res, next) => {
@@ -12,25 +26,19 @@ module.exports = (req, res, next) => {
   req.setEncoding('utf8');
 
   req
-  .on('data', function(chunk){
-    body += chunk;
-  });
+  .on('data', (chunk) => { body += chunk; });
 
   req
-  .on('end', function(chunk){
+  .on('end', (chunk) => {
 
-    if(chunk !== undefined){
-      body += chunk;
-    }
+    if(chunk !== undefined){ body += chunk; }
 
     let start = Date.now();
     let parsedData = parseBody(body);
 
     parseJsonPayload(parsedData)
-    .then((dayObj) => {
-      return day.add(dayObj);
-    })
-    .then((dayObj) => {
+    .then(day.add)
+    .then(dayObj => {
 
       let ellapsed = Date.now() - start;
       console.log(`it took ${prettyMs(ellapsed)}`);
@@ -38,7 +46,10 @@ module.exports = (req, res, next) => {
         status: 'ok',
         message: `Day was saved at ${prettyMs(ellapsed)}`
       });
+
+      return dayObj;
     })
+    .then(markParseUpdate)
     .catch((err) => {
 
       console.log(err.message);
@@ -46,9 +57,7 @@ module.exports = (req, res, next) => {
 
       res.json({
         status: 'error',
-        error: {
-          message: err.message
-        }
+        error: { message: err.message }
       });
     });
   });

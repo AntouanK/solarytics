@@ -1,9 +1,11 @@
+'use strict';
 
-const r         = require('rethinkdb');
-const DB_HOST   = 'rdbMaster';
-const DB_NAME   = 'solar';
-const TABLE_NAME= 'aiani';
-const dbExports = {};
+const r           = require('rethinkdb');
+const DB_HOST     = 'rdbMaster';
+const DB_NAME     = 'solar';
+const TABLE_NAME  = 'aiani';
+const tablesToCreate = [TABLE_NAME, 'meta'];
+const dbExports   = {};
 
 
 dbExports.isReady =
@@ -39,16 +41,19 @@ r.connect({
 })
 .then(list => {
 
-  if(list.indexOf(TABLE_NAME) < 0){
-    return r
-    .tableCreate(TABLE_NAME, {
-      shards: 3,
-      primaryKey: 'date'
-    })
-    .run(dbExports.conn);
-  }
+  return Promise
+  .all(
+    tablesToCreate
+    .filter(tableName => list.indexOf(tableName) < 0)
+    .map(tableName => r
+      .tableCreate(tableName, {
+        primaryKey: TABLE_NAME === tableName ? 'date' : 'id'
+      })
+      .run(dbExports.conn)
+    )
+  );
 })
-.then(() => { console.log(`[db] DB connection and tables are now ready.`);});
+.then(() => console.log(`[db] DB connection and tables are now ready.`));
 
 
 module.exports = dbExports;
