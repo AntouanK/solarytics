@@ -1,8 +1,10 @@
+'use strict';
 
-const util  = require('util');
-const r     = require('rethinkdb');
-const db    = require('./db');
-const day   = {};
+const util    = require('util');
+const r       = require('rethinkdb');
+const db      = require('./db');
+const whCache = require('./whCache');
+const day     = {};
 
 
 
@@ -34,6 +36,9 @@ day.add = (newDay) => {
 
   day.check(newDay);
 
+  //  invalidate the cache for that date
+  whCache.delete(newDay.date);
+
   return r
   .table('aiani')
   .insert(newDay, { conflict: 'update' })
@@ -51,6 +56,13 @@ day.get = (date) => {
 
 
 day.getWh = (date) => {
+
+  if(whCache.has(date)){
+    return Promise.resolve({
+      date,
+      value: whCache.get(date)
+    });
+  }
 
   return day
   .get(date)
@@ -81,6 +93,9 @@ day.getWh = (date) => {
       .value;
     })
     .reduce((prev, cur) => { return prev + cur; });
+
+    //  set new value to cache
+    whCache.set(date, value);
 
     //  ---------------------------------------> EXIT
     return { date, value };

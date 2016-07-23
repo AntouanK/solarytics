@@ -1,15 +1,17 @@
+'use strict';
 
 const day = require('../day');
 
 module.exports = (req, res) => {
 
-  day.get(req.params.date)
-  .then((dateObj) => {
-    res.json({
+  day
+  .get(req.params.date)
+  .then((dateObj) => res
+    .json({
       status: 'ok',
       content: dateObj
-    });
-  })
+    })
+  )
   .catch((err) => {
 
     console.log(err.message);
@@ -17,9 +19,7 @@ module.exports = (req, res) => {
 
     res.json({
       status: 'error',
-      error: {
-        message: err.message
-      }
+      error: { message: err.message }
     });
   });
 };
