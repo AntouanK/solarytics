@@ -10,5 +10,6 @@ _db
 
 services/web-client/fe/dist
 
+elm-stuff
 
 scripts/*.txt
