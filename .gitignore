@@ -9,3 +9,6 @@ box-data/
 _db
 
 services/web-client/fe/dist
+
+
+scripts/*.txt
