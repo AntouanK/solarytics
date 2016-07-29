@@ -3,8 +3,8 @@ module Types exposing (..)
 import Http
 
 
-type alias News =
-    { headline : String }
+type alias AvailableDate =
+    { date : String }
 
 
 type FetchedData a
@@ -13,10 +13,11 @@ type FetchedData a
     | Succeed a
 
 
+-- Model
 type alias Model =
-    { news : FetchedData (List News)
+    { availableDates : FetchedData (List AvailableDate)
     }
 
 
 type Msg
-    = GetNewsResponse (FetchedData (List News))
+    = GetAvailableDatesResponse (FetchedData (List AvailableDate))

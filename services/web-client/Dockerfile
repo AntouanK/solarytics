@@ -8,12 +8,11 @@ RUN npm i -g elm
 RUN npm i
 
 # build the FE
-ADD ./fe            /home/docker/workplace/web-client/fe
-WORKDIR /home/docker/workplace/web-client/fe
-ENV NODE_ENV production
-RUN mkdir -p dist
-RUN elm
-RUN elm make --yes src/App.elm --output dist/index.html
+#ADD ./fe            /home/docker/workplace/web-client/fe
+#WORKDIR /home/docker/workplace/web-client/fe
+#ENV NODE_ENV production
+#RUN mkdir -p dist
+#RUN elm make --yes src/App.elm --output dist/index.html
 
 # run the server
 ADD ./src           /home/docker/workplace/web-client/src

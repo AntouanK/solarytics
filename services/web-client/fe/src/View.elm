@@ -8,9 +8,7 @@ import Types exposing (..)
 root : Model -> Html Msg
 root model =
     div []
-        [ h1 [ style [ ( "font-style", "italic" ) ] ]
-            [ text "News!" ]
-        , case model.news of
+        [ case model.availableDates of
             Loading ->
                 text "Loading"
 
@@ -18,14 +16,27 @@ root model =
                 div [ class "alert alert-danger" ]
                     [ text (toString error) ]
 
-            Succeed news ->
-                ul [] (List.map newsItem news)
+            Succeed availableDates ->
+                div []
+                    [
+                      h1 [ style [ ] ]
+                          [ text "Available dates ..." ],
+                          (datesRender
+                              (List.reverse
+                                  (List.sortBy
+                                      .date availableDates
+                                  )
+                              )
+                          )
+                    ]
         ]
 
 
-newsItem : News -> Html Msg
-newsItem news =
-    li []
-        [ h3 []
-            [ text (Debug.log "Showing" news.headline) ]
-        ]
+datesRender : List AvailableDate -> Html Msg
+datesRender list =
+    select [] (List.map dateRender list)
+
+dateRender : AvailableDate -> Html Msg
+dateRender availableDate =
+    option [(value availableDate.date)]
+        [ text (Debug.log "Rendering" availableDate.date) ]

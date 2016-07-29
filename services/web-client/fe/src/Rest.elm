@@ -6,24 +6,24 @@ import Task
 import Types exposing (..)
 
 
-decodeNewsItem : Decoder News
-decodeNewsItem =
-    object1 News
-        ("title" := string)
+decodeAvailableDates : Decoder AvailableDate
+decodeAvailableDates =
+    object1 AvailableDate
+        ("date" := string)
 
 
-decodeNews : Decoder (List News)
-decodeNews =
-    "hits" := (list decodeNewsItem)
+decodeAvailableDatesResponse : Decoder (List AvailableDate)
+decodeAvailableDatesResponse =
+    "content" := (list decodeAvailableDates)
 
 
 endpoint : String
 endpoint =
-    "https://hn.algolia.com/api/v1/search_by_date?tags=story&hitsPerPage=50"
+    "https://crazy.homeip.net/api/day-list"
 
 
-getNews : Cmd Msg
-getNews =
-    Http.get decodeNews endpoint
+getAvailableDates : Cmd Msg
+getAvailableDates =
+    Http.get decodeAvailableDatesResponse endpoint
         |> Task.perform Failed Succeed
-        |> Cmd.map GetNewsResponse
+        |> Cmd.map GetAvailableDatesResponse

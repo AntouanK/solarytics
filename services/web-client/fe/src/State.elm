@@ -6,17 +6,16 @@ import Types exposing (..)
 
 init : ( Model, Cmd Msg )
 init =
-    ( { news = Loading
-      }
-    , getNews
+    ( { availableDates = Loading }
+    , getAvailableDates
     )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        GetNewsResponse response ->
-            ( { model | news = response }
+        GetAvailableDatesResponse response ->
+            ( { model | availableDates = response }
             , Cmd.none
             )
 
