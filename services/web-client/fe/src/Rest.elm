@@ -17,13 +17,35 @@ decodeAvailableDatesResponse =
     "content" := (list decodeAvailableDates)
 
 
-endpoint : String
-endpoint =
+availableDatesEndpoint : String
+availableDatesEndpoint =
     "https://crazy.homeip.net/api/day-list"
 
 
 getAvailableDates : Cmd Msg
 getAvailableDates =
-    Http.get decodeAvailableDatesResponse endpoint
+    Http.get decodeAvailableDatesResponse availableDatesEndpoint
         |> Task.perform Failed Succeed
         |> Cmd.map GetAvailableDatesResponse
+
+
+decodeWhForRes : Decoder (List Day)
+decodeWhForRes =
+    "content" :=
+        (list
+            (object2
+                Day
+                ("date" := string)
+                ("value" := int))
+        )
+
+
+getWhFor : String -> String -> Cmd Msg
+getWhFor startDate endDate =
+    let endpoint =
+        "https://crazy.homeip.net/api/wh/per/date/" ++
+            startDate ++ "/" ++ endDate
+    in
+    Http.get decodeWhForRes endpoint
+        |> Task.perform Failed Succeed
+        |> Cmd.map GetWhFor
