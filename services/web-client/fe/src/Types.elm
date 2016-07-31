@@ -2,6 +2,7 @@ module Types exposing (..)
 
 import Http
 import Dict
+import Time exposing (Time)
 
 
 type alias AvailableDate =
@@ -100,14 +101,16 @@ type FetchedData a
     | Succeed a
 
 
-
 type alias Model =
     { availableDates : FetchedData (List AvailableDate)
     , selectedDate : String
     , whPerDay : Dict.Dict String Int
+    , lastServerUpdate : Maybe Int
     }
 
 type Msg
     = GetAvailableDatesResponse (FetchedData (List AvailableDate))
-    | DateChange (String)
+    | DateChange String
     | GetWhFor (FetchedData (List Day))
+    | CheckLastUpdate (FetchedData Int)
+    | Tick Time

@@ -1,11 +1,10 @@
 module View exposing (..)
 import Html exposing (..)
-import Html.Events exposing (on, targetValue)
 import Html.Attributes exposing (..)
 import Types exposing (..)
-import Json.Decode as Decode
-import Dict
+import SingleDate exposing (..)
 import MyDate exposing (..)
+import Date exposing (fromTime)
 
 
 
@@ -19,34 +18,49 @@ root model =
                 , ("bottom", "0")
                 , ("left", "0")
                 , ("display", "flex")
+                , ("flex-direction", "row")
+                , ("flex-wrap", "wrap")
+                , ("align-items", "center")
+                , ("overflow-y", "scroll")
+                , ("overflow", "hidden")
                 ]
         ]
-        [ renderAvailableDates model
-        ]
+        (List.append
+          (renderAvailableDates model)
+          (renderLastServerUpdate model)
+        )
+-- --------------------------------------------------------------------------
 
 
 
-renderAvailableDates : Model -> Html Msg
+renderAvailableDates : Model -> List (Html Msg)
 renderAvailableDates model =
   case model.availableDates of
       Loading ->
-          text "Loading"
+          [ SingleDate.renderMessage "Loading" ]
 
       Failed error ->
-          div [] [ text (toString error) ]
+          [ SingleDate.renderMessage (toString error) ]
 
       Succeed availableDates ->
-          div []
-              [ div []
-                    [ text ("Select date ")
-                    , (datesRender
-                        (List.reverse (List.sortBy .date availableDates))
-                      )
-                    , renderWh model.whPerDay model.selectedDate
-                    ]
-              , (renderMonthsData (datesToMonthdata availableDates))
-              , text "ok"
-              ]
+          let d1 = Debug.log "- selectedDate" model.selectedDate in
+          [ SingleDate.render model.selectedDate model.whPerDay availableDates
+          , (renderMonthsData (datesToMonthdata availableDates))
+          ]
+
+
+renderLastServerUpdate : Model -> List (Html Msg)
+renderLastServerUpdate model =
+  [div [ style [ ("flex", "0 0 280px") ] ]
+      (case model.lastServerUpdate of
+          Nothing ->
+              [ text "Last server update : unknown!" ]
+
+          Just l ->
+              let dateString = toString (Date.fromTime (toFloat l))
+              in
+              [ text ("Last server update : " ++ dateString) ])
+  ]
 
 
 renderMonthsData : List MonthData -> Html a
@@ -58,43 +72,12 @@ renderMonthsData monthDataList =
       option  [(value m.key)]
               [text textContent]
   in
-  div []
-      [ select  []
-                (List.map monthToOption monthDataList)
+  div [ style [ ("flex", "1 0 auto")
+              , ("padding", "30px")
+              , ("margin", "30px")
+              , ("border", "aliceblue 1px solid")
+              ]
       ]
-
-
-
-renderWh : (Dict.Dict String Int) -> String -> Html Msg
-renderWh whPerDay date =
-  let selectedDayWh = Dict.get (Debug.log "key (read): " date) whPerDay
-  in
-    case selectedDayWh of
-        Just val ->
-          text (
-            "Wh: " ++ (toString val) ++
-            " / KWh: " ++ (toString ((toFloat val) / 1000))
-          )
-        Nothing ->
-          text "nothing here"
-
-
-selectDecoder : Decode.Decoder Msg
-selectDecoder =
-  Decode.map DateChange targetValue
-
-
-datesRender : List AvailableDate -> Html Msg
-datesRender list =
-    select  [ style [("margin", "0 5px")]
-            , on "change" selectDecoder
-            ]
-            (List.map dateSelectRender ({date = ""} :: list))
-
-
-dateSelectRender : AvailableDate -> Html Msg
-dateSelectRender availableDate =
-    let dateInt = availableDate.date
-    in
-    option [(value dateInt)]
-        [ text (dateToString dateInt) ]
+      [ select  []
+                (List.reverse (List.map monthToOption monthDataList))
+      ]

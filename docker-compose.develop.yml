@@ -23,6 +23,8 @@ data-store:
 web-client:
   build: ./services/web-client
   working_dir: /home/docker/workplace/web-client
+  volumes:
+    - ./services/web-client/fe/dist:/home/docker/workplace/web-client/fe/dist
 
 rdbMaster:
   image: rethinkdb

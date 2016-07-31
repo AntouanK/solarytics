@@ -53,7 +53,7 @@ datesToMonthdata dates =
             , key = key
             }
         in
-        let d1 = (Debug.log "key" (toString yymm)) in
+        -- let d1 = (Debug.log "key" (toString yymm)) in
         Dict.insert
             key
             monthData
@@ -66,5 +66,11 @@ datesToMonthdata dates =
     in
     let dict = List.foldl sortDateToMonthData (Dict.fromList []) dateInts
     in
-    let d1 = List.map (\key -> (Debug.log "key" key))(Dict.keys dict) in
     Dict.values dict
+
+
+getLatestAvailableDate : List AvailableDate -> Maybe String
+getLatestAvailableDate list =
+    let dates = List.map .date list
+    in
+    List.head (List.reverse (List.sort dates))

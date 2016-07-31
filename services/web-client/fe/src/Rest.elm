@@ -5,6 +5,7 @@ import Task
 import Types exposing (..)
 
 
+-- -----------------------------------------------------------------------------
 decodeAvailableDates : Decoder AvailableDate
 decodeAvailableDates =
     object1 AvailableDate
@@ -26,8 +27,10 @@ getAvailableDates =
     Http.get decodeAvailableDatesResponse availableDatesEndpoint
         |> Task.perform Failed Succeed
         |> Cmd.map GetAvailableDatesResponse
+-- -----------------------------------------------------------------------------
 
 
+-- -----------------------------------------------------------------------------
 decodeWhForRes : Decoder (List Day)
 decodeWhForRes =
     "content" :=
@@ -48,3 +51,20 @@ getWhFor startDate endDate =
     Http.get decodeWhForRes endpoint
         |> Task.perform Failed Succeed
         |> Cmd.map GetWhFor
+-- -----------------------------------------------------------------------------
+
+
+-- -----------------------------------------------------------------------------
+decodeLastUpdateResponse : Decoder Int
+decodeLastUpdateResponse =
+    at ["content", "timestamp"] int
+
+
+getLastServerUpdate : Cmd Msg
+getLastServerUpdate =
+    let endpoint = "https://crazy.homeip.net/api/last-update"
+    in
+    Http.get decodeLastUpdateResponse endpoint
+        |> Task.perform Failed Succeed
+        |> Cmd.map CheckLastUpdate
+-- -----------------------------------------------------------------------------
