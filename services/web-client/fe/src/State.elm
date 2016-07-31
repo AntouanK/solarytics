@@ -1,5 +1,4 @@
 module State exposing (..)
-
 import Rest exposing (..)
 import Types exposing (..)
 import Dict
@@ -47,6 +46,7 @@ update msg model =
                     let error = (Debug.log "error:" e)
                     in
                     ( model, Cmd.none )
+
 
 subscriptions : Model -> Sub Msg
 subscriptions model =

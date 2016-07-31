@@ -1,5 +1,4 @@
 module Rest exposing (..)
-
 import Http
 import Json.Decode exposing (..)
 import Task
