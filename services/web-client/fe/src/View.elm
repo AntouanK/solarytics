@@ -43,7 +43,6 @@ renderAvailableDates model =
           [ SingleDate.renderMessage (toString error) ]
 
       Succeed availableDates ->
-          let d1 = Debug.log "- selectedDate" model.selectedDate in
           [ SingleDate.render model.selectedDate model.whPerDay availableDates
           , (renderMonthsData (datesToMonthdata availableDates))
           ]
