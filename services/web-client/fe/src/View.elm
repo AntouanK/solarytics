@@ -2,7 +2,7 @@ module View exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Types exposing (..)
-import SingleDate
+import SingleDateView
 import MonthView
 import MyDate exposing (..)
 import Date exposing (fromTime)
@@ -42,24 +42,24 @@ renderAvailableDates : Model -> List (Html Msg)
 renderAvailableDates model =
   case model.availableDates of
       Loading ->
-          [ SingleDate.renderMessage "Loading" ]
+          [ SingleDateView.renderMessage "Loading" ]
 
       Failed error ->
-          [ SingleDate.renderMessage (toString error) ]
+          [ SingleDateView.renderMessage (toString error) ]
 
       Succeed availableDates ->
-          [ SingleDate.render
-              model.selectedDate model.whPerDay availableDates
-          , MonthView.render
+          [ MonthView.render
               (datesToMonthdata availableDates)
               model.whPerDay
               model.selectedMonthView
+          , SingleDateView.render
+              model.selectedDate model.whPerDay availableDates
           ]
 
 
 renderLastServerUpdate : Model -> List (Html Msg)
 renderLastServerUpdate model =
-  [div  [ style [ ("flex", "0 0 280px")
+  [div  [ style [ ("flex", "0 0 auto")
                 , ("margin", "30px")
                 ]
         ]

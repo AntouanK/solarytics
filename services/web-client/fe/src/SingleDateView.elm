@@ -1,4 +1,4 @@
-module SingleDate exposing (..)
+module SingleDateView exposing (..)
 import Types exposing (..)
 import Html exposing (..)
 import Html.Events exposing (on, targetValue)
@@ -11,9 +11,11 @@ import MyDate exposing (..)
 topStyle : List (String, String)
 topStyle =
     [ ("flex", "0 0 auto")
-    , ("padding", "30px")
+    , ("padding", "20px")
     , ("margin", "30px")
-    , ("border", "aliceblue 1px solid")
+    , ( "border", "1px solid black")
+    , ( "box-shadow", "0 1px 2px rgba(0,0,0,0.5), 0 1px 10px rgba(0,0,0,0.5)")
+    , ( "background-color", "#101928")
     ]
 
 
@@ -27,8 +29,7 @@ renderMessage message =
 render : String -> Dict.Dict String Int -> List AvailableDate -> Html Msg
 render selectedDate whPerDay availableDates =
     div [ style topStyle ]
-        [ text ("Select date ")
-        , (datesRender
+        [ (datesRender
               selectedDate
               (List.reverse (List.sortBy .date availableDates)))
         , div   []
@@ -65,12 +66,10 @@ selectDecoder =
 
 datesRender : String -> List AvailableDate -> Html Msg
 datesRender selectedDate list =
-    select  [ style [("margin", "0 5px")]
-            , on "change" selectDecoder
-            ]
+    select  [ on "change" selectDecoder ]
             (List.map
                 (\d -> dateOptionRender d (d.date == selectedDate))
-                ({date = ""} :: list)
+                list
             )
 
 

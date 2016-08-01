@@ -11,17 +11,20 @@ import LineChart exposing (render)
 
 topStyle : List (String, String)
 topStyle =
-    [ ("flex", "1 0 auto")
-    , ("padding", "30px")
+    [ ("flex", "1 0 400px")
+    , ("padding", "20px")
     , ("margin", "30px")
-    , ("border", "aliceblue 1px solid")
     , ("display", "flex")
     , ("flex-direction", "column")
+    , ( "border", "1px solid black")
+    , ( "box-shadow", "0 1px 2px rgba(0,0,0,0.5), 0 1px 10px rgba(0,0,0,0.5)")
+    , ( "background-color", "#101928")
     ]
 
 
 render : List MonthData -> Dict.Dict String Int -> String -> Html Msg
 render monthDataList whPerDay selectedMonth =
+    let d1 = Debug.log "selectedMonth" selectedMonth in
     let monthWhPerDay =
         let keys =
             List.filter

@@ -4,7 +4,7 @@ import Types exposing (..)
 import Dict
 import String
 import Time exposing (Time, minute)
-import MyDate exposing (getLatestAvailableDate)
+import MyDate exposing (getLatestAvailableDate,datesToMonthdata)
 
 
 init : ( Model, Cmd Msg )
@@ -51,13 +51,23 @@ handleGetAvailDatesRes model response =
         Succeed availableDates ->
             let latestDate = getLatestAvailableDate availableDates
             in
+            let latestMonth =
+                case List.head
+                        (List.reverse (datesToMonthdata availableDates)) of
+                    Nothing -> ""
+                    Just m -> m.key
+            in
             case latestDate of
                 Nothing ->
                     defaultResult
                 Just l ->
-                    ( { model | availableDates = response, selectedDate = l }
-                    , getWhFor l l  -- Since we set the selected date,
-                                    --  now get the Wh for that date
+                    ( { model |
+                        availableDates = response
+                      , selectedDate = l
+                      , selectedMonthView = latestMonth
+                      }
+                      , getWhFor l l  -- Since we set the selected date,
+                                      --  now get the Wh for that date
                     )
         Loading ->
             defaultResult
