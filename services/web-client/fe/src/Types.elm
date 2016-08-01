@@ -23,7 +23,6 @@ type alias MonthData =
     { totalDays : Int
     , month: Month
     , year : Int
-    , daysData : List Day
     , key : String
     }
 
@@ -104,6 +103,7 @@ type FetchedData a
 type alias Model =
     { availableDates : FetchedData (List AvailableDate)
     , selectedDate : String
+    , selectedMonthView : String
     , whPerDay : Dict.Dict String Int
     , lastServerUpdate : Maybe Int
     }
@@ -114,3 +114,4 @@ type Msg
     | GetWhFor (FetchedData (List Day))
     | CheckLastUpdate (FetchedData Int)
     | Tick Time
+    | MonthViewSelect String

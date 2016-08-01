@@ -45,15 +45,18 @@ datesToMonthdata dates =
         in
         let key = (toString yymm)
         in
+        let total =
+            case Dict.get key dict of
+                Just entry -> (entry.totalDays + 1)
+                Nothing -> 1
+        in
         let monthData =
-            { totalDays = 0
+            { totalDays = total
             , month = (stringToMonth (monthIntToText (yymm % 100)))
             , year = 2000 + ((yymm - (yymm % 100)) // 100)
-            , daysData = []
             , key = key
             }
         in
-        -- let d1 = (Debug.log "key" (toString yymm)) in
         Dict.insert
             key
             monthData
@@ -66,6 +69,7 @@ datesToMonthdata dates =
     in
     let dict = List.foldl sortDateToMonthData (Dict.fromList []) dateInts
     in
+    -- let d1 = Debug.log "dict" dict in
     Dict.values dict
 
 

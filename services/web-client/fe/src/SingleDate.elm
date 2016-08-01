@@ -7,6 +7,7 @@ import Json.Decode as Decode
 import Dict
 import MyDate exposing (..)
 
+
 topStyle : List (String, String)
 topStyle =
     [ ("flex", "0 0 auto")
@@ -68,16 +69,16 @@ datesRender selectedDate list =
             , on "change" selectDecoder
             ]
             (List.map
-                (\d -> dateSelectRender d (d.date == selectedDate))
+                (\d -> dateOptionRender d (d.date == selectedDate))
                 ({date = ""} :: list)
             )
 
 
-dateSelectRender : AvailableDate -> Bool -> Html Msg
-dateSelectRender availableDate isSelected =
+dateOptionRender : AvailableDate -> Bool -> Html Msg
+dateOptionRender availableDate isSelected =
     let dateInt = availableDate.date
     in
     option  [ (value dateInt)
-            , selected <| isSelected
+            , selected isSelected
             ]
             [ text (dateToString dateInt) ]

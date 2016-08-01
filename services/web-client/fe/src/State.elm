@@ -2,6 +2,7 @@ module State exposing (..)
 import Rest exposing (..)
 import Types exposing (..)
 import Dict
+import String
 import Time exposing (Time, minute)
 import MyDate exposing (getLatestAvailableDate)
 
@@ -10,6 +11,7 @@ init : ( Model, Cmd Msg )
 init =
     (   { availableDates = Loading
         , selectedDate = "-"
+        , selectedMonthView = "-"
         , whPerDay = Dict.fromList []
         , lastServerUpdate = Nothing
         }
@@ -23,11 +25,18 @@ init =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        GetAvailableDatesResponse res -> handleGetAvailDatesRes model res
-        DateChange val -> handleDateChange model val
-        GetWhFor res -> handleGetWh model res
-        CheckLastUpdate res -> handleCheckLastUpdate model res
-        Tick newTime -> handleTick model newTime
+        GetAvailableDatesResponse res ->
+            handleGetAvailDatesRes model res
+        DateChange val ->
+            handleDateChange model val
+        GetWhFor res ->
+            handleGetWh model res
+        CheckLastUpdate res ->
+            handleCheckLastUpdate model res
+        Tick newTime ->
+            handleTick model newTime
+        MonthViewSelect val ->
+            handleMonthViewSelect model val
 -- --------------------------------------------------------------------------
 
 
@@ -67,20 +76,16 @@ handleGetWh : Model -> FetchedData (List Day) -> ( Model, Cmd Msg )
 handleGetWh model response =
     case response of
         Succeed days ->
-            let day = (List.head days)
+            let whPerDayDict =
+                List.foldl
+                    (\day currentDict ->
+                        Dict.insert day.date day.value currentDict)
+                    model.whPerDay
+                    days
             in
-            case day of
-                Nothing ->
-                    ( model, Cmd.none )
-                Just d ->
-                    let date = d.date
-                    in
-                    ( { model |
-                        whPerDay =
-                        Dict.insert date d.value model.whPerDay
-                      }
-                    , Cmd.none
-                    )
+            ( { model | whPerDay = whPerDayDict }
+            , Cmd.none
+            )
         Loading ->
             ( model, Cmd.none )
         Failed e ->
@@ -120,6 +125,46 @@ handleTick model newTime =
                     )
         _ ->
             ( model, getLastServerUpdate )
+
+
+handleMonthViewSelect : Model -> String -> ( Model, Cmd Msg )
+handleMonthViewSelect model monthSelected =
+    let d1 = (Debug.log "m" monthSelected)
+    in
+    let defaultResult =
+        ( { model | selectedMonthView = monthSelected }
+        , Cmd.none
+        )
+    in
+    case model.availableDates of
+        Succeed availableDates ->
+            let daysInMonth =
+                List.sort
+                    (List.map
+                        .date
+                        (List.filter
+                            (\avDate -> (String.startsWith monthSelected avDate.date))
+                            availableDates
+                        )
+                    )
+            in
+            let firstDay = List.head daysInMonth
+            in
+            let lastDay = List.head (List.reverse daysInMonth)
+            in
+            case firstDay of
+                Just firstDay ->
+                    case lastDay of
+                        Just lastDay ->
+                            ( { model | selectedMonthView = monthSelected }
+                            , getWhFor firstDay lastDay
+                            )
+                        Nothing ->
+                            defaultResult
+                Nothing ->
+                    defaultResult
+        _ ->
+            defaultResult
 -- --------------------------------------------------------------------------
 
 
