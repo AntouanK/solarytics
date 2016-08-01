@@ -24,7 +24,6 @@ topStyle =
 
 render : List MonthData -> Dict.Dict String Int -> String -> Html Msg
 render monthDataList whPerDay selectedMonth =
-    let d1 = Debug.log "selectedMonth" selectedMonth in
     let monthWhPerDay =
         let keys =
             List.filter
@@ -49,7 +48,6 @@ render monthDataList whPerDay selectedMonth =
     let totalDays =
         List.length monthWhPerDay
     in
-    let d1 = Debug.log "monthWhPerDay" monthWhPerDay in
     div [ style topStyle ]
         [ renderSelectMonth (List.reverse monthDataList) selectedMonth
         -- , text ("Total days: " ++ )

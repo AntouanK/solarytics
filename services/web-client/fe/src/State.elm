@@ -139,8 +139,6 @@ handleTick model newTime =
 
 handleMonthViewSelect : Model -> String -> ( Model, Cmd Msg )
 handleMonthViewSelect model monthSelected =
-    let d1 = (Debug.log "m" monthSelected)
-    in
     let defaultResult =
         ( { model | selectedMonthView = monthSelected }
         , Cmd.none
