@@ -8,10 +8,12 @@ import Time exposing (Time)
 type alias AvailableDate =
     { date : String }
 
+
 type alias Day =
     { date : String
     , value : Int
     }
+
 
 type alias Date =
     { day : Int
@@ -19,14 +21,17 @@ type alias Date =
     , year : Int
     }
 
+
 type alias MonthData =
     { totalDays : Int
-    , month: Month
+    , month : Month
     , year : Int
     , key : String
     }
 
-type Month = January
+
+type Month
+    = January
     | February
     | March
     | April
@@ -40,58 +45,134 @@ type Month = January
     | December
     | InvalidMonth
 
+
 stringToMonth : String -> Month
 stringToMonth m =
     case m of
-        "January" -> January
-        "February" -> February
-        "March" -> March
-        "April" -> April
-        "May" -> May
-        "June" -> June
-        "July" -> July
-        "August" -> August
-        "September" -> September
-        "October" -> October
-        "November" -> November
-        "December" -> December
-        _ -> InvalidMonth
+        "January" ->
+            January
+
+        "February" ->
+            February
+
+        "March" ->
+            March
+
+        "April" ->
+            April
+
+        "May" ->
+            May
+
+        "June" ->
+            June
+
+        "July" ->
+            July
+
+        "August" ->
+            August
+
+        "September" ->
+            September
+
+        "October" ->
+            October
+
+        "November" ->
+            November
+
+        "December" ->
+            December
+
+        _ ->
+            InvalidMonth
 
 
 monthToString : Month -> String
 monthToString m =
     case m of
-        January -> "January"
-        February -> "February"
-        March -> "March"
-        April -> "April"
-        May -> "May"
-        June -> "June"
-        July -> "July"
-        August -> "August"
-        September -> "September"
-        October -> "October"
-        November -> "November"
-        December -> "December"
-        InvalidMonth -> "Invalid month"
+        January ->
+            "January"
+
+        February ->
+            "February"
+
+        March ->
+            "March"
+
+        April ->
+            "April"
+
+        May ->
+            "May"
+
+        June ->
+            "June"
+
+        July ->
+            "July"
+
+        August ->
+            "August"
+
+        September ->
+            "September"
+
+        October ->
+            "October"
+
+        November ->
+            "November"
+
+        December ->
+            "December"
+
+        InvalidMonth ->
+            "Invalid month"
 
 
 monthIntToText : Int -> String
 monthIntToText m =
     case m of
-        1  -> "January"
-        2  -> "February"
-        3  -> "March"
-        4  -> "April"
-        5  -> "May"
-        6  -> "June"
-        7  -> "July"
-        8  -> "August"
-        9  -> "September"
-        10 -> "October"
-        11 -> "November"
-        12 -> "December"
-        _ -> "Invalid month"
+        1 ->
+            "January"
+
+        2 ->
+            "February"
+
+        3 ->
+            "March"
+
+        4 ->
+            "April"
+
+        5 ->
+            "May"
+
+        6 ->
+            "June"
+
+        7 ->
+            "July"
+
+        8 ->
+            "August"
+
+        9 ->
+            "September"
+
+        10 ->
+            "October"
+
+        11 ->
+            "November"
+
+        12 ->
+            "December"
+
+        _ ->
+            "Invalid month"
 
 
 type FetchedData a
@@ -101,17 +182,18 @@ type FetchedData a
 
 
 type alias Model =
-    { availableDates : FetchedData (List AvailableDate)
+    { availableDates : Maybe (List AvailableDate)
     , selectedDate : String
     , selectedMonthView : String
     , whPerDay : Dict.Dict String Int
     , lastServerUpdate : Maybe Int
     }
 
+
 type Msg
-    = GetAvailableDatesResponse (FetchedData (List AvailableDate))
+    = GetAvailableDatesResponse (Result Http.Error (List AvailableDate))
     | DateChange String
-    | GetWhFor (FetchedData (List Day))
-    | CheckLastUpdate (FetchedData Int)
+    | GetWhFor (Result Http.Error (List Day))
+    | CheckLastUpdate (Result Http.Error Int)
     | Tick Time
     | MonthViewSelect String

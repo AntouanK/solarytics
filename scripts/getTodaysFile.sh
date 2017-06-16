@@ -5,7 +5,7 @@ echo "making dir";
 mkdir -p /home/antouank/.solar/aiani/data ;
 
 echo "cd to scripts"
-cd /home/antouank/_repos_/solarytics/scripts
+cd /home/antouank/_REPOS_/solarytics/scripts
 
 
 TODAY=`date +%y%m%d`
@@ -37,6 +37,7 @@ if [ "$TOTAL_FILES_SAVED" -eq 2 ]; then
 	echo "posting to DB"
 	curl 	-H "Content-Type: text/plain" \
 		-X POST \
+		-s \
 		--data-binary @/home/antouank/.solar/aiani/data/int_kwr_$TODAY.txt \
 		https://$DOMAIN/api/parse
 
