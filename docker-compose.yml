@@ -7,7 +7,7 @@ nginx:
     - data-store
   volumes:
     - ./nginx.conf:/etc/nginx/nginx.conf
-    - /etc/letsencrypt/archive/crazy.homeip.net:/etc/letsencrypt/live/crazy.homeip.net
+    - /etc/letsencrypt:/etc/letsencrypt
   ports:
     - "80:80"
     - "443:443"
