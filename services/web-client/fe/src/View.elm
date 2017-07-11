@@ -1,12 +1,12 @@
 module View exposing (..)
 
+import Date exposing (fromTime)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Types exposing (..)
-import SingleDateView
 import MonthView
 import MyDate exposing (..)
-import Date exposing (fromTime)
+import SingleDateView
+import Types exposing (..)
 
 
 root : Model -> Html Msg
@@ -44,18 +44,22 @@ root model =
 
 renderAvailableDates : Model -> List (Html Msg)
 renderAvailableDates model =
-    case model.availableDates of
+    let
+        { availableDates, whPerDay, selectedMonthView, selectedDate } =
+            model
+    in
+    case availableDates of
         Nothing ->
             [ SingleDateView.renderMessage (toString "no dates yet") ]
 
         Just availableDates ->
             [ MonthView.render
                 (datesToMonthdata availableDates)
-                model.whPerDay
-                model.selectedMonthView
+                whPerDay
+                selectedMonthView
             , SingleDateView.render
-                model.selectedDate
-                model.whPerDay
+                selectedDate
+                whPerDay
                 availableDates
             ]
 
@@ -79,9 +83,9 @@ renderLastServerUpdate model =
                     dateString =
                         toString (Date.fromTime (toFloat l))
                 in
-                    [ div [ style [ ( "padding", "10px" ) ] ]
-                        [ text ("Last server update : " ++ dateString) ]
-                    ]
+                [ div [ style [ ( "padding", "10px" ) ] ]
+                    [ text ("Last server update : " ++ dateString) ]
+                ]
         )
     ]
 
@@ -101,4 +105,4 @@ stylesheet =
         children =
             []
     in
-        [ node tag attrs children ]
+    [ node tag attrs children ]

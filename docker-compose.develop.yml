@@ -1,51 +1,39 @@
+version: '2'
+services:
+        nginx:
+          image: nginx
+          privileged: true
+          links:
+            - web-client
+            - data-store
+          volumes:
+            - ./nginx.conf:/etc/nginx/nginx.conf
+            - /etc/letsencrypt:/etc/letsencrypt
+          ports:
+            - "80:80"
+            - "443:443"
 
-nginx:
-  image: nginx
-  privileged: true
-  links:
-    - web-client
-    - data-store
-  volumes:
-    - ./nginx.conf:/etc/nginx/nginx.conf
-    - /etc/letsencrypt:/etc/letsencrypt
-  ports:
-    - "80:80"
-    - "443:443"
+        data-store:
+          build: ./services/data-store
+          links:
+            - rdbMaster
+          depends_on:
+            - rdbMaster
+          ports:
+            - "8080:80"
+          working_dir: /home/docker/workplace/data-store
 
-data-store:
-  build: ./services/data-store
-  links:
-    - rdbMaster
-  ports:
-    - "8080:80"
-  working_dir: /home/docker/workplace/data-store
+        web-client:
+          build: ./services/web-client
+          working_dir: /home/docker/workplace/web-client
+          volumes:
+            - ./services/web-client/fe/dist:/home/docker/workplace/web-client/fe/dist
 
-web-client:
-  build: ./services/web-client
-  working_dir: /home/docker/workplace/web-client
-  volumes:
-    - ./services/web-client/fe/dist:/home/docker/workplace/web-client/fe/dist
+        rdbMaster:
+          image: rethinkdb
+          ports:
+            - "18080:8080"
+            - "28015:28015"
+          volumes:
+            - ./_db:/data
 
-rdbMaster:
-  image: rethinkdb
-  ports:
-    - "18080:8080"
-  volumes:
-    - ./_db/master:/data
-  command: rethinkdb --bind all
-
-rdbNodeA:
-  image: rethinkdb
-  links:
-    - rdbMaster
-  volumes:
-    - ./_db/nodeA:/data
-  command: rethinkdb --join rdbMaster:29015 --bind all
-
-rdbNodeB:
-  image: rethinkdb
-  links:
-    - rdbMaster
-  volumes:
-    - ./_db/nodeB:/data
-  command: rethinkdb --join rdbMaster:29015 --bind all

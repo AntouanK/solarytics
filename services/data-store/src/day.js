@@ -68,10 +68,10 @@ day.getWh = (date) => {
   .get(date)
   .then(dayObj => {
 
-    //  if null, return value undefined
+    //  if null, return value 0
     if(dayObj === null){
       //  -------------------------------------> EXIT
-      return { date };
+      return { date, value: 0 };
     }
 
     let value =

@@ -11,7 +11,6 @@ import Json.Decode as Decode
         , list
         , string
         )
-import Task
 import Types exposing (..)
 
 
@@ -31,7 +30,7 @@ decodeAvailableDates =
 
 decodeAvailableDatesResponse : Decoder (List AvailableDate)
 decodeAvailableDatesResponse =
-    (field "content" <| list decodeAvailableDates)
+    field "content" <| list decodeAvailableDates
 
 
 availableDatesEndpoint : String
@@ -50,6 +49,7 @@ getAvailableDates =
 -- -----------------------------------------------------------------------------
 
 
+decodeDay : Decoder Day
 decodeDay =
     Decode.succeed Day
         |> andMap (field "date" string)
@@ -58,7 +58,7 @@ decodeDay =
 
 decodeWhForRes : Decoder (List Day)
 decodeWhForRes =
-    (field "content" <| list decodeDay)
+    field "content" <| list decodeDay
 
 
 getWhFor : String -> String -> Cmd Msg
@@ -70,8 +70,8 @@ getWhFor startDate endDate =
                 ++ "/"
                 ++ endDate
     in
-        Http.get endpoint decodeWhForRes
-            |> Http.send GetWhFor
+    Http.get endpoint decodeWhForRes
+        |> Http.send GetWhFor
 
 
 
@@ -90,8 +90,8 @@ getLastServerUpdate =
         endpoint =
             "https://crazy.homeip.net/api/last-update"
     in
-        Http.get endpoint decodeLastUpdateResponse
-            |> Http.send CheckLastUpdate
+    Http.get endpoint decodeLastUpdateResponse
+        |> Http.send CheckLastUpdate
 
 
 
