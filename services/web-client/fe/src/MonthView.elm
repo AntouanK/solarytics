@@ -1,13 +1,13 @@
 module MonthView exposing (..)
 
-import Types exposing (..)
-import Dict
-import String
+import Dict exposing (Dict)
 import Html exposing (..)
+import Html.Attributes exposing (selected, style, value)
 import Html.Events exposing (on, targetValue)
-import Html.Attributes exposing (style, value, selected)
 import Json.Decode as Decode
-import LineChart exposing (render)
+import MonthBarChart
+import Time.Date as Date
+import Types exposing (..)
 
 
 topStyle : List ( String, String )
@@ -19,59 +19,74 @@ topStyle =
     , ( "flex-direction", "column" )
     , ( "border", "1px solid black" )
     , ( "box-shadow", "0 1px 2px rgba(0,0,0,0.5), 0 1px 10px rgba(0,0,0,0.5)" )
-    , ( "background-color", "#101928" )
+    , ( "background-color", "#8792a5" )
     ]
 
 
-render : List MonthData -> Dict.Dict String Int -> String -> Html Msg
+render : List MonthData -> Dict String Int -> String -> Html Msg
 render monthDataList whPerDay selectedMonth =
     let
+        datesWhTuplesForMonth =
+            List.map (\( key, value ) -> ( key, value * 2 )) <|
+                List.filter
+                    (\( key, value ) -> String.startsWith selectedMonth key)
+                    (Dict.toList whPerDay)
+
         monthWhPerDay =
+            List.map Tuple.second datesWhTuplesForMonth
+
+        --List.map (\( key, value ) -> (value * 2) // 1000) keys
+        toDateWhTuple ( yymmdd, value ) =
             let
-                keys =
-                    List.filter
-                        (\( key, value ) -> String.startsWith selectedMonth key)
-                        (Dict.toList whPerDay)
+                ddResult =
+                    String.toInt <|
+                        String.slice 4 6 yymmdd
+
+                mmResult =
+                    String.toInt <|
+                        String.slice 2 4 yymmdd
+
+                yyResult =
+                    String.toInt <|
+                        String.slice 0 2 yymmdd
             in
-                List.map (\( key, value ) -> ((value * 2) // 1000)) keys
+            case ( ddResult, mmResult, yyResult ) of
+                ( Ok dd, Ok mm, Ok yy ) ->
+                    ( Date.date dd mm (2000 + yy), toFloat value )
+
+                _ ->
+                    ( Date.date 1 1 1900, 0 )
+
+        timeSeries =
+            List.map toDateWhTuple datesWhTuplesForMonth
+
+        max =
+            toFloat <|
+                Maybe.withDefault 0 <|
+                    List.maximum monthWhPerDay
+
+        min =
+            toFloat <|
+                Maybe.withDefault 0 <|
+                    List.minimum monthWhPerDay
+
+        total =
+            List.foldl (+) 0 monthWhPerDay
+
+        totalDays =
+            List.length monthWhPerDay
     in
-        let
-            max =
-                case (List.maximum monthWhPerDay) of
-                    Just m ->
-                        m
+    div [ style topStyle ]
+        [ renderSelectMonth (List.reverse monthDataList) selectedMonth
 
-                    Nothing ->
-                        0
-        in
-            let
-                min =
-                    case (List.minimum monthWhPerDay) of
-                        Just m ->
-                            m
-
-                        Nothing ->
-                            0
-            in
-                let
-                    total =
-                        List.foldl (+) 0 monthWhPerDay
-                in
-                    let
-                        totalDays =
-                            List.length monthWhPerDay
-                    in
-                        div [ style topStyle ]
-                            [ renderSelectMonth (List.reverse monthDataList) selectedMonth
-
-                            -- , text ("Total days: " ++ )
-                            , small [] [ text ("0 - 150kWh  |  values are x2") ]
-                            , LineChart.render monthWhPerDay
-                            , div [] [ text ("Max: " ++ (toString max) ++ "kWh") ]
-                            , div [] [ text ("Min: " ++ (toString min) ++ "kWh") ]
-                            , div [] [ text ("Total: " ++ (toString total) ++ "kWh") ]
-                            , div [] [ text ("Days: " ++ (toString totalDays)) ]
-                            ]
+        -- , text ("Total days: " ++ )
+        , small [] [ text "0 - 150kWh  |  values are x2" ]
+        , MonthBarChart.render timeSeries max
+        , div [] [ text ("Max: " ++ toString (max / 1000) ++ "kWh") ]
+        , div [] [ text ("Min: " ++ toString (min / 1000) ++ "kWh") ]
+        , div [] [ text ("Total: " ++ toString (total // 1000) ++ "kWh") ]
+        , div [] [ text ("Days: " ++ toString totalDays) ]
+        ]
 
 
 selectDecoder : Decode.Decoder Msg
@@ -85,13 +100,13 @@ renderSelectMonth list selectedMonth =
         monthToOption m =
             let
                 textContent =
-                    (monthToString m.month) ++ " " ++ (toString m.year)
+                    monthToString m.month ++ " " ++ toString m.year
             in
-                option
-                    [ (value m.key)
-                    , selected (selectedMonth == m.key)
-                    ]
-                    [ text textContent ]
+            option
+                [ value m.key
+                , selected (selectedMonth == m.key)
+                ]
+                [ text textContent ]
     in
-        select [ on "change" selectDecoder ]
-            (List.map monthToOption list)
+    select [ on "change" selectDecoder ]
+        (List.map monthToOption list)

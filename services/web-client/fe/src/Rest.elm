@@ -17,6 +17,11 @@ import Types exposing (..)
 -- -----------------------------------------------------------------------------
 
 
+baseUrl : String
+baseUrl =
+    "https://crazy.homeip.net:11043"
+
+
 andMap : Decoder a -> Decoder (a -> b) -> Decoder b
 andMap =
     Decode.map2 (|>)
@@ -35,7 +40,7 @@ decodeAvailableDatesResponse =
 
 availableDatesEndpoint : String
 availableDatesEndpoint =
-    "https://crazy.homeip.net/api/day-list"
+    baseUrl ++ "/api/day-list"
 
 
 getAvailableDates : Cmd Msg
@@ -65,7 +70,8 @@ getWhFor : String -> String -> Cmd Msg
 getWhFor startDate endDate =
     let
         endpoint =
-            "https://crazy.homeip.net/api/wh/per/date/"
+            baseUrl
+                ++ "/api/wh/per/date/"
                 ++ startDate
                 ++ "/"
                 ++ endDate
@@ -88,7 +94,7 @@ getLastServerUpdate : Cmd Msg
 getLastServerUpdate =
     let
         endpoint =
-            "https://crazy.homeip.net/api/last-update"
+            baseUrl ++ "/api/last-update"
     in
     Http.get endpoint decodeLastUpdateResponse
         |> Http.send CheckLastUpdate
