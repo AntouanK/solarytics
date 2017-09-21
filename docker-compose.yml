@@ -10,8 +10,8 @@ services:
         - ./nginx.conf:/etc/nginx/nginx.conf
         - /etc/letsencrypt:/etc/letsencrypt
       ports:
-        - "80:80"
-        - "443:443"
+        - "11080:80"
+        - "11043:443"
 
     data-store:
       build: ./services/data-store
